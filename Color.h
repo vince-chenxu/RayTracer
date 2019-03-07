@@ -6,5 +6,19 @@ public:
     // Support +,- with other color
     // Support scalar *, /
     // May support conversion from xyz
-    Color();  
+
+    // default constructor
+    Color();
+    // constructor with float r, g, b
+    Color(float red, float green, float blue);
+    // overload + operator
+    Color operator+(Color other);
+    // overload - operator
+    Color operator-(Color other);
+    // overload * operator
+    Color operator*(float scalar);
+    // overload / operator
+    Color operator/(float scalar);
+private:
+    float r, g, b;
 };
