@@ -19,6 +19,7 @@ public:
     // Same as intersect, but just return whether there is any intersection or
     // not
     bool intersectP(Ray& ray);
+    void print();
 
 private:
     Point* v1;

@@ -107,13 +107,13 @@ void Scene::loadFromFile(const char* filename)
                         cout << "printing Sampler width and height\n";
                         sampler->print();
                         // below is a place holder
-                        sample = new Sample();
+                        //sample = new Sample();
 
                         // Color object
-                        color = new Color();
+                        //color = new Color();
 
                         // Ray object
-                        ray = new Ray();
+                        //ray = new Ray();
 
                         // Film object
                         film = new Film();
@@ -208,6 +208,10 @@ void Scene::loadFromFile(const char* filename)
                         // triVec.push(values[1]); // coord 2
                         // triVec.push(values[2]); // coord 3
                         tri.push_back(Tri(values[0], values[1], values[2]));
+                        shape.push_back(new Triangle(vertex[int(values[0])].x, vertex[int(values[0])].y, vertex[int(values[0])].z,
+                                                 vertex[int(values[1])].x, vertex[int(values[1])].y, vertex[int(values[1])].z,
+                                                 vertex[int(values[2])].x, vertex[int(values[2])].y, vertex[int(values[2])].z));
+
                     }
                     //triNum ++;
                 }
@@ -220,6 +224,7 @@ void Scene::loadFromFile(const char* filename)
                         // triVec.push(values[1]); // coord 2
                         // triVec.push(values[2]); // coord 3
                         sph.push_back(Sph(values[0], values[1], values[2], values[3]));
+                        shape.push_back(new Sphere(values[0], values[1], values[2], values[3]));
                     }
                     //triNum ++;
                 }
@@ -492,8 +497,8 @@ void Scene::render()
     cout << "Printing all vertices:\n";
     for (int i = 0; i < vertex.size(); i ++)
         vertex[i].print();
-    // check triangles
-    cout << "Printing all triangles\n";
+    // check tri
+    cout << "Printing all tris\n";
     for (int i = 0; i < tri.size(); i ++)
         tri[i].print();
     // check spheres
@@ -501,11 +506,19 @@ void Scene::render()
     for (int i = 0; i < sph.size(); i ++)
         sph[i].print();
 
-    while (!sampler->getSample(sample))
+    // check triangles
+    cout << "Print all triangles and spheres\n";
+    for (int i = 0; i < shape.size(); i ++)
+        shape[i]->print();
+    while (sampler->getSample(&sample))
     {
-        camera->generateRay(*sample, ray);
-        //raytracer.trace(ray, &color);
-        film->commit(*sample, *color);
+        //cout << "Printing sample coords\n";
+        //sample.print();
+        //cout << "Printing sampler\n";
+        //sampler->print();
+        camera->generateRay(sample, &ray);
+        raytracer.trace(ray, 10, &color, shape);
+        film->commit(sample, color);
     }
     film->writeImage();
 }

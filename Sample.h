@@ -10,7 +10,7 @@ public:
     Sample();
     // constructor
     Sample(float x_val, float y_val);
-
+    void print();
     float x, y; // store member coords
 };
 

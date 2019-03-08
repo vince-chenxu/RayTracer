@@ -2,6 +2,8 @@
 #define LOCALGEO_H
 
 #include "Normal.h"
+#include "Point.h"
+
 using namespace std;
 
 class LocalGeo

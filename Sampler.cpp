@@ -35,7 +35,7 @@ bool Sampler::getSample(Sample* sample)
     // return true;
     if (currentX > width - 1)
         return false;
-    sample = new Sample(currentX, currentY);
+    *sample = Sample(currentX, currentY);
     if (currentY + 1 > height - 1) {
         currentY = 0;
         currentX++;

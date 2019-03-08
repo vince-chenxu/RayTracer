@@ -17,7 +17,7 @@ public:
     Sampler();
     // constructor
     Sampler(int w, int h);
-    bool getSample(Sample* sample);
+    bool getSample(Sample *sample);
     //bool getSample(float x, float y);
     void print();
 private:

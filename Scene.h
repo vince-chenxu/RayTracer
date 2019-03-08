@@ -7,6 +7,10 @@
 #include "Vertex.h"
 #include "Tri.h"
 #include "Sph.h"
+#include "Sphere.h"
+#include "Triangle.h"
+#include "Shape.h"
+#include "RayTracer.h"
 // #include "Color.h"
 // #include "Ray.h"
 // #include "Film.h"
@@ -52,9 +56,9 @@ private:
     Film* film;
     // Sampler object pointer
     Sampler* sampler;
-    Sample* sample;
-    Ray* ray;
-    Color* color;
+    Sample sample;
+    Ray ray;
+    Color color;
     Camera* camera;
     // vector that holds all vertices
     vector<Vertex> vertex;
@@ -62,4 +66,7 @@ private:
     vector<Tri> tri;
     // vector that holds all sphere coords with radius
     vector<Sph> sph;
+    // vector that holds all shapes
+    vector<Shape*> shape;
+    RayTracer raytracer;
 };

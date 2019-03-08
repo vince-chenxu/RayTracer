@@ -1,3 +1,8 @@
+#ifndef INTERSECTION_H
+#define INTERSECTION_H
+#include "Shape.h"
+#include "LocalGeo.h"
+#include <iostream>
 using namespace std;
 
 class Intersection
@@ -11,9 +16,11 @@ public:
     // destructor
     ~Intersection();
 
-private:
+//private:
     // member varaible
-    LocalGeo localGeo
+    LocalGeo localGeo;
     // Primitive* primitive
     Shape* shape;
 };
+
+#endif // INTERSECTION_H

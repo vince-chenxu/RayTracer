@@ -1,5 +1,7 @@
 #ifndef NORMAL_H
 #define NORMAL_H
+#include <iostream>
+#include <cmath>
 using namespace std;
 
 class Normal
@@ -21,7 +23,7 @@ public:
     Normal operator-(Normal other);
     // normalize function
     void normalize();
-private:
+//private:
     float x, y, z;
 };
 

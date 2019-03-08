@@ -20,11 +20,12 @@ public:
     // // Same as intersect, but just return whether there is any intersection or
     // // not
     // virtual bool intersectP(Ray& ray);
-    bool intersect(Ray& ray, float* thit, LocalGeo* local);
+    virtual bool intersect(Ray& ray, float* thit, LocalGeo* local) = 0;
 
     // Same as intersect, but just return whether there is any intersection or
     // not
-    bool intersectP(Ray& ray);
+    virtual bool intersectP(Ray& ray) = 0;
+    virtual void print();
 
 };
 

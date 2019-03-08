@@ -79,3 +79,10 @@ bool Sphere::intersectP(Ray& ray) {
     LocalGeo* local = new LocalGeo();
     return intersect(ray, thit, local);
 }
+
+void Sphere::print()
+{
+    cout << "center coordinates: ";
+    center->print();
+    cout << "radius: " << radius << endl;
+}

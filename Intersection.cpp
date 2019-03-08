@@ -1,5 +1,5 @@
 #include "Intersection.h"
-#include <iostream>
+
 using namespace std;
 
 
@@ -12,7 +12,7 @@ Intersection::Intersection()
 Intersection::Intersection(LocalGeo geo, Shape* s)
 {
     // may need to implement copy contructor for corresponding classes
-    locaoGeo = geo;
+    localGeo = geo;
     shape = s;
 }
 // destructor

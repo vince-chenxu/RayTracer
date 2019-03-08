@@ -1,5 +1,4 @@
 #include "BRDF.h"
-#include <iostream>
 
 using namespace std;
 
@@ -14,5 +13,5 @@ BRDF::BRDF(Color kd_v, Color ks_v, Color ka_v, Color kr_v)
 
 BRDF::~BRDF()
 {
-    
+
 }

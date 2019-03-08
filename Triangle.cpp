@@ -73,3 +73,12 @@ bool Triangle::intersectP(Ray& ray)
     LocalGeo* local = new LocalGeo();
     return intersect(ray, thit, local);
 }
+void Triangle::print()
+{
+    cout << "Vertex1: ";
+    v1->print();
+    cout << "Vertex2: ";
+    v2->print();
+    cout << "Vertex3: ";
+    v3->print();
+}

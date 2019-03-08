@@ -1,6 +1,4 @@
 #include "Normal.h"
-#include <iostream>
-#include <cmath>
 
 using namespace std;
 
@@ -24,17 +22,17 @@ Normal::~Normal()
 }
 
 // overload + operator
-Normal::Normal operator+(Normal other)
+Normal Normal::operator+(Normal other)
 {
     return Normal(x + other.x, y + other.y, z + other.z);
 }
 // overload - operator
-Normal::Normal operator-(Normal other)
+Normal Normal::operator-(Normal other)
 {
     return Normal(x - other.x, y - other.y, z - other.z);
 }
 // normalize function
-void normalize()
+void Normal::normalize()
 {
     float divisor = sqrt(x * x + y * y + z * z);
     if (divisor != 0.0f)

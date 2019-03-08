@@ -1,5 +1,7 @@
 #ifndef BRDF_H
 #define BRDF_H
+#include "Color.h"
+#include <iostream>
 using namespace std;
 
 class BRDF
