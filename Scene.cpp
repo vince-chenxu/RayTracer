@@ -1,15 +1,6 @@
 // header files
 #include "Scene.h"
 
-// cpp files
-#include "Point.cpp"
-
-// useful libraries
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-
 using namespace std;
 
 Scene::Scene()
@@ -21,10 +12,11 @@ Scene::Scene(const char* filename)
 {
     // pass the filename and begin command parsing process
     loadFromFile(filename);
+    render();
 }
 
 // help function much like the one from HW2
-bool Scene::readvals (stringstream &s, const int numvals, float* values)
+bool Scene::readvals (stringstream &s, const int numvals, string values[])
 {
     for (int i = 0; i < numvals; i++)
     {
@@ -39,7 +31,7 @@ bool Scene::readvals (stringstream &s, const int numvals, float* values)
 }
 
 // load file function
-void Scene::loadFromFile(const char* fileName)
+void Scene::loadFromFile(const char* filename)
 {
     string str, cmd;
     ifstream in;
@@ -56,8 +48,9 @@ void Scene::loadFromFile(const char* fileName)
 
                 stringstream s(str);
                 s >> cmd;
+                // cout << cmd << endl;
                 int i;
-                float values[10]; // Position and color for light, colors for others
+                string values[10]; // Position and color for light, colors for others
                 // Up to 10 params for cameras.
                 bool validinput; // Validity of input
 
@@ -72,7 +65,8 @@ void Scene::loadFromFile(const char* fileName)
                     if (validinput)
                     {
 
-                        width = (int) values[0]; height = (int) values[1];
+                        //width = (int) values[0]; height = (int) values[1];
+                        width = stoi(values[0]); height = stoi(values[1]);
                     }
                 }
 
@@ -82,12 +76,16 @@ void Scene::loadFromFile(const char* fileName)
                     validinput = readvals(s,10,values); // 10 values eye cen up fov
                     if (validinput)
                     {
-                        // lookFrom
-                        //vec3 from = vec3(values[0],values[1],values[2]);
-                        lookFrom = new Point(values[0],values[1],values[2])；
-                        // lookAt
-                        //vec3 at = vec3(values[3],values[4],values[5]);
-                        lookAt = new Point(values[3],values[4],values[5]);
+                        // // lookFrom
+                        // //vec3 from = vec3(values[0],values[1],values[2]);
+                        lookFrom = new Point(stof(values[0]), stof(values[1]), stof(values[2]));
+                        cout << "printing Point lookFrom\n";
+                        lookFrom->print();
+                        // // lookAt
+                        // //vec3 at = vec3(values[3],values[4],values[5]);
+                        lookAt = new Point(stof(values[3]), stof(values[4]), stof(values[5]));
+                        cout << "printing Point lookAt\n";
+                        lookAt->print();
                         //center = at;
                         //eyeinit = from;
                         // Calculate the direction of eye
@@ -97,25 +95,35 @@ void Scene::loadFromFile(const char* fileName)
                         // Transform the vector by calling upvector function
                         //upinit = Transform::upvector(upinit,eyeDirection);
                         // up
-                        up = new Point(values[6],values[7],values[8]);
+                        up = new Vector(stof(values[6]), stof(values[7]), stof(values[8]));
+                        cout << "printing Vector up\n";
+                        up->print();
                         // Set fovy value
-                        fov = values[9];
+                        fov = stof(values[9]);
+                        cout << "printing fov value\n";
+                        cout << fov << endl;
                         // declare Sampler object for later sample calculations
-                        Sampler sampler();
-                        // for all pixels:
-                        //    generateSample(pixel)
-                        // not sure where this belongs for now, fix later
-
-                        // now we have a sample back
+                        sampler = new Sampler(width, height);
+                        cout << "printing Sampler width and height\n";
+                        sampler->print();
                         // below is a place holder
-                        Sample sample;
+                        sample = new Sample();
+
+                        // Color object
+                        color = new Color();
+
+                        // Ray object
+                        ray = new Ray();
+
+                        // Film object
+                        film = new Film();
 
                         // here we pass a sample to fill the ray
-                        Camera(lookFrom, lookAt, up, sample, ray);
+                        //camera = new Camera(*lookFrom, *lookAt, *up, fov, width, height);
                         // here we get a ray back
 
                         // now we trace the ray with raytracer
-                        RayTracer rayTracer();
+                        //RayTracer rayTracer();
                         // now we get the color
 
                     }
@@ -128,7 +136,7 @@ void Scene::loadFromFile(const char* fileName)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        ka = new Color(values[0],values[1],values[2]);
+                        // ka = new Color(values[0],values[1],values[2]);
                     }
                 }
                 // diffuse command
@@ -138,7 +146,7 @@ void Scene::loadFromFile(const char* fileName)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        kd = new Color(values[0],values[1],values[2]);
+                        // kd = new Color(values[0],values[1],values[2]);
                     }
                 }
                 // specular command
@@ -148,8 +156,44 @@ void Scene::loadFromFile(const char* fileName)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        ks = new Color(values[0],values[1],values[2]);
+                        // ks = new Color(values[0],values[1],values[2]);
                     }
+                }
+                // vertex command
+                else if (cmd == "vertex")
+                {
+                    if (vertInd + 1 > maxverts)
+                      // More vertices read than maxverts
+                      cerr << "Reached Maximum Number of vertex " << maxverts << " Will ignore further vertices\n";
+                    else
+                    {
+                        validinput = readvals(s,3,values);
+                        if (validinput)
+                        {
+                            for (int i  = 0; i < 3; i ++)
+                            {
+                                if (value[i][0] == '+')
+                                    vertArray[vertInd][i] = int(values[i][1]-'0');
+                                else
+                                    vertArray[vertInd][i] = stoi(values[i]);
+                            }
+                            // vertArray[vertInd][0] = values[0]; // x
+                            // vertArray[vertInd][1] = values[1]; // y
+                            // vertArray[vertInd][2] = values[2]; // z
+                        }
+                        vertInd ++;
+                    }
+                }
+                else if (cmd == "tri")
+                {
+                    validinput = readvals(s,3,values);
+                    if (validinput)
+                    {
+                        triVec.push(values[0]); // coord 1
+                        triVec.push(values[1]); // coord 2
+                        triVec.push(values[2]); // coord 3
+                    }
+                    triNum ++;
                 }
 
                 // Material Commands
@@ -158,268 +202,269 @@ void Scene::loadFromFile(const char* fileName)
                 // the skeleton, also as a hint of how to do the more complex ones.
                 // Note that no transforms/stacks are applied to the colors.
 
-          else if (cmd == "ambient") {
-            validinput = readvals(s, 3, values); // colors
-            if (validinput) {
-              for (i = 0; i < 3; i++) {
-                ambient[i] = values[i];
-              }
+          // else if (cmd == "ambient") {
+          //   validinput = readvals(s, 3, values); // colors
+          //   if (validinput) {
+          //     for (i = 0; i < 3; i++) {
+          //       ambient[i] = values[i];
+          //     }
+          //   }
+          // } else if (cmd == "diffuse") {
+          //   validinput = readvals(s, 3, values);
+          //   if (validinput) {
+          //     for (i = 0; i < 3; i++) {
+          //       diffuse[i] = values[i];
+          //     }
+          //   }
+          // } else if (cmd == "specular") {
+          //   validinput = readvals(s, 3, values);
+          //   if (validinput) {
+          //     for (i = 0; i < 3; i++) {
+          //       specular[i] = values[i];
+          //     }
+          //   }
+          // }
+          //   // Not applicable yet
+          //   else if (cmd == "emission") {
+          //   validinput = readvals(s, 4, values);
+          //   if (validinput) {
+          //     for (i = 0; i < 4; i++) {
+          //       emission[i] = values[i];
+          //     }
+          //   }
+          // }
+          //   // Not applicable yet
+          //   else if (cmd == "shininess") {
+          //   validinput = readvals(s, 1, values);
+          //   if (validinput) {
+          //     shininess = values[0];
+          //   }
+          // } else if (cmd == "size") {
+          //   validinput = readvals(s,2,values);
+          //   if (validinput) {
+          //     w = (int) values[0]; h = (int) values[1];
+          //   }
+          // } else if (cmd == "camera") {
+          //   validinput = readvals(s,10,values); // 10 values eye cen up fov
+          //   if (validinput) {
+          //
+          //     // YOUR CODE FOR HW 2 HERE
+          //     // Use all of values[0...9]
+          //     // You may need to use the upvector fn in Transform.cpp
+          //     // to set up correctly.
+          //     // Set eyeinit upinit center fovy in variables.h
+          //
+          //     // The lookFrom vector
+          //     vec3 from = vec3(values[0],values[1],values[2]);
+          //     // The lookAt vector
+          //     vec3 at = vec3(values[3],values[4],values[5]);
+          //     center = at;
+          //     eyeinit = from;
+          //     // Calculate the direction of eye
+          //     vec3 eyeDirection = at - from;
+          //     // Normalize the vector
+          //     upinit = glm::normalize(vec3(values[6], values[7], values[8]));
+          //     // Transform the vector by calling upvector function
+          //     upinit = Transform::upvector(upinit,eyeDirection);
+          //     // Set fovy value
+          //     fovy = values[9];
+          //
+          //   }
+          // }
+          //
+          // // I've left the code for loading objects in the skeleton, so
+          // // you can get a sense of how this works.
+          // // Also look at demo.txt to get a sense of why things are done this way.
+          // else if (cmd == "sphere" || cmd == "cube" || cmd == "teapot") {
+          //   if (numobjects == maxobjects) { // No more objects
+          //     cerr << "Reached Maximum Number of Objects " << numobjects << " Will ignore further objects\n";
+          //   } else {
+          //     validinput = readvals(s, 1, values);
+          //     if (validinput) {
+          //       object * obj = &(objects[numobjects]);
+          //       obj->size = values[0];
+          //
+          //       // Set the object's light properties
+          //       for (i = 0; i < 4; i++) {
+          //         (obj->ambient)[i] = ambient[i];
+          //         (obj->diffuse)[i] = diffuse[i];
+          //         (obj->specular)[i] = specular[i];
+          //         (obj->emission)[i] = emission[i];
+          //       }
+          //       obj->shininess = shininess;
+          //
+          //       // Set the object's transform
+          //       obj->transform = transfstack.top();
+          //
+          //       // Set the object's type
+          //       if (cmd == "sphere") {
+          //         obj->type = sphere;
+          //       } else if (cmd == "cube") {
+          //         obj->type = cube;
+          //       } else if (cmd == "teapot") {
+          //         obj->type = teapot;
+          //       }
+          //     }
+          //     ++numobjects;
+          //   }
+          // }
+          //
+          // else if (cmd == "translate") {
+          //   validinput = readvals(s,3,values);
+          //   if (validinput) {
+          //
+          //     // YOUR CODE FOR HW 2 HERE.
+          //     // Think about how the transformation stack is affected
+          //     // You might want to use helper functions on top of file.
+          //     // Also keep in mind what order your matrix is!
+          //
+          //     // Translate the matrix
+          //     mat4 matrixTranslation =  Transform::translate(values[0], values[1], values[2]);
+          //     // Call helper function
+          //     rightmultiply(matrixTranslation, transfstack);
+          //
+          //   }
+          // }
+          // else if (cmd == "scale") {
+          //   validinput = readvals(s,3,values);
+          //   if (validinput) {
+          //
+          //     // YOUR CODE FOR HW 2 HERE.
+          //     // Think about how the transformation stack is affected
+          //     // You might want to use helper functions on top of file.
+          //     // Also keep in mind what order your matrix is!
+          //
+          //     // Scale the matrix
+          //     mat4 matrixScaling = Transform::scale(values[0], values[1], values[2]);
+          //     // Call helper function
+          //     rightmultiply(matrixScaling, transfstack);
+          //
+          //   }
+          // }
+          // else if (cmd == "rotate") {
+          //   validinput = readvals(s,4,values);
+          //   if (validinput) {
+          //
+          //     // YOUR CODE FOR HW 2 HERE.
+          //     // values[0..2] are the axis, values[3] is the angle.
+          //     // You may want to normalize the axis (or in Transform::rotate)
+          //     // See how the stack is affected, as above.
+          //     // Note that rotate returns a mat3.
+          //     // Also keep in mind what order your matrix is!
+          //
+          //     // Create temp vector used for rotatio
+          //     vec3 temp = vec3(values[0], values[1], values[2]);
+          //     // Rotate the matrix by calling rotate
+          //     mat4 matrixRotation = mat4(Transform::rotate(values[3], temp));
+          //     // Call helper function
+          //     rightmultiply(matrixRotation, transfstack);
+          //
+          //   }
+          // }
+          //
+          // // I include the basic push/pop code for matrix stacks
+          // else if (cmd == "pushTransform") {
+          //   transfstack.push(transfstack.top());
+          // } else if (cmd == "popTransform") {
+          //   if (transfstack.size() <= 1) {
+          //     cerr << "Stack has no elements.  Cannot Pop\n";
+          //   } else {
+          //     transfstack.pop();
+          //   }
+          // }
+          // // maxverts command
+          // else if (cmd == "maxverts")
+          // {
+          //     validinput = readvals(s,1,values);
+          //     if (validinput)
+          //         maxverts = (int)values[0];
+          //
+          // }
+          // // vertex command
+          // else if (cmd == "vertex")
+          // {
+          //     if (vertInd + 1 > maxverts)
+          //       // More vertices read than maxverts
+          //       cerr << "Reached Maximum Number of vertex " << maxverts << " Will ignore further vertices\n";
+          //     else
+          //     {
+          //         validinput = readvals(s,3,values);
+          //         if (validinput)
+          //         {
+          //             for (int i  = 0; i < 3; i ++)
+          //             {
+          //                 if (value[i][0] == '+')
+          //                     vertArray[vertInd][i] = int(values[i][1]-'0');
+          //                 else
+          //                     vertArray[vertInd][i] = stoi(values[i]);
+          //             }
+          //             // vertArray[vertInd][0] = values[0]; // x
+          //             // vertArray[vertInd][1] = values[1]; // y
+          //             // vertArray[vertInd][2] = values[2]; // z
+          //         }
+          //         vertInd ++;
+          //     }
+          // }
+          // else if (cmd == "tri")
+          // {
+          //     validinput = readvals(s,3,values);
+          //     if (validinput)
+          //     {
+          //         triVec.push(values[0]); // coord 1
+          //         triVec.push(values[1]); // coord 2
+          //         triVec.push(values[2]); // coord 3
+          //     }
+          //     triNum ++;
+          // }
+          // else if (cmd == "sphere")
+          // {
+          //     validinput = readvals(s,4,values);
+          //     if (validinput)
+          //     {
+          //         for (int i  = 0; i < 4; i ++)
+          //         {
+          //             if (value[i][0] == '+')
+          //                 sphereVec[sphereInd][i] = 0.5;
+          //             else
+          //                 // assume this works for now
+          //                 sphereVec[sphereInd][i] = stod(values[i]);
+          //         }
+          //     }
+          //     triNum ++;
+          // }
+            else
+            {
+                cerr << "Unknown Command: " << cmd << " Skipping \n";
             }
-          } else if (cmd == "diffuse") {
-            validinput = readvals(s, 3, values);
-            if (validinput) {
-              for (i = 0; i < 3; i++) {
-                diffuse[i] = values[i];
-              }
-            }
-          } else if (cmd == "specular") {
-            validinput = readvals(s, 3, values);
-            if (validinput) {
-              for (i = 0; i < 3; i++) {
-                specular[i] = values[i];
-              }
-            }
-          }
-            // Not applicable yet
-            else if (cmd == "emission") {
-            validinput = readvals(s, 4, values);
-            if (validinput) {
-              for (i = 0; i < 4; i++) {
-                emission[i] = values[i];
-              }
-            }
-          }
-            // Not applicable yet
-            else if (cmd == "shininess") {
-            validinput = readvals(s, 1, values);
-            if (validinput) {
-              shininess = values[0];
-            }
-          } else if (cmd == "size") {
-            validinput = readvals(s,2,values);
-            if (validinput) {
-              w = (int) values[0]; h = (int) values[1];
-            }
-          } else if (cmd == "camera") {
-            validinput = readvals(s,10,values); // 10 values eye cen up fov
-            if (validinput) {
-
-              // YOUR CODE FOR HW 2 HERE
-              // Use all of values[0...9]
-              // You may need to use the upvector fn in Transform.cpp
-              // to set up correctly.
-              // Set eyeinit upinit center fovy in variables.h
-
-              // The lookFrom vector
-              vec3 from = vec3(values[0],values[1],values[2]);
-              // The lookAt vector
-              vec3 at = vec3(values[3],values[4],values[5]);
-              center = at;
-              eyeinit = from;
-              // Calculate the direction of eye
-              vec3 eyeDirection = at - from;
-              // Normalize the vector
-              upinit = glm::normalize(vec3(values[6], values[7], values[8]));
-              // Transform the vector by calling upvector function
-              upinit = Transform::upvector(upinit,eyeDirection);
-              // Set fovy value
-              fovy = values[9];
-
-            }
-          }
-
-          // I've left the code for loading objects in the skeleton, so
-          // you can get a sense of how this works.
-          // Also look at demo.txt to get a sense of why things are done this way.
-          else if (cmd == "sphere" || cmd == "cube" || cmd == "teapot") {
-            if (numobjects == maxobjects) { // No more objects
-              cerr << "Reached Maximum Number of Objects " << numobjects << " Will ignore further objects\n";
-            } else {
-              validinput = readvals(s, 1, values);
-              if (validinput) {
-                object * obj = &(objects[numobjects]);
-                obj->size = values[0];
-
-                // Set the object's light properties
-                for (i = 0; i < 4; i++) {
-                  (obj->ambient)[i] = ambient[i];
-                  (obj->diffuse)[i] = diffuse[i];
-                  (obj->specular)[i] = specular[i];
-                  (obj->emission)[i] = emission[i];
-                }
-                obj->shininess = shininess;
-
-                // Set the object's transform
-                obj->transform = transfstack.top();
-
-                // Set the object's type
-                if (cmd == "sphere") {
-                  obj->type = sphere;
-                } else if (cmd == "cube") {
-                  obj->type = cube;
-                } else if (cmd == "teapot") {
-                  obj->type = teapot;
-                }
-              }
-              ++numobjects;
-            }
-          }
-
-          else if (cmd == "translate") {
-            validinput = readvals(s,3,values);
-            if (validinput) {
-
-              // YOUR CODE FOR HW 2 HERE.
-              // Think about how the transformation stack is affected
-              // You might want to use helper functions on top of file.
-              // Also keep in mind what order your matrix is!
-
-              // Translate the matrix
-              mat4 matrixTranslation =  Transform::translate(values[0], values[1], values[2]);
-              // Call helper function
-              rightmultiply(matrixTranslation, transfstack);
-
-            }
-          }
-          else if (cmd == "scale") {
-            validinput = readvals(s,3,values);
-            if (validinput) {
-
-              // YOUR CODE FOR HW 2 HERE.
-              // Think about how the transformation stack is affected
-              // You might want to use helper functions on top of file.
-              // Also keep in mind what order your matrix is!
-
-              // Scale the matrix
-              mat4 matrixScaling = Transform::scale(values[0], values[1], values[2]);
-              // Call helper function
-              rightmultiply(matrixScaling, transfstack);
-
-            }
-          }
-          else if (cmd == "rotate") {
-            validinput = readvals(s,4,values);
-            if (validinput) {
-
-              // YOUR CODE FOR HW 2 HERE.
-              // values[0..2] are the axis, values[3] is the angle.
-              // You may want to normalize the axis (or in Transform::rotate)
-              // See how the stack is affected, as above.
-              // Note that rotate returns a mat3.
-              // Also keep in mind what order your matrix is!
-
-              // Create temp vector used for rotatio
-              vec3 temp = vec3(values[0], values[1], values[2]);
-              // Rotate the matrix by calling rotate
-              mat4 matrixRotation = mat4(Transform::rotate(values[3], temp));
-              // Call helper function
-              rightmultiply(matrixRotation, transfstack);
-
-            }
-          }
-
-          // I include the basic push/pop code for matrix stacks
-          else if (cmd == "pushTransform") {
-            transfstack.push(transfstack.top());
-          } else if (cmd == "popTransform") {
-            if (transfstack.size() <= 1) {
-              cerr << "Stack has no elements.  Cannot Pop\n";
-            } else {
-              transfstack.pop();
-            }
-          }
-          // maxverts command
-          else if (cmd == "maxverts")
-          {
-              validinput = readvals(s,1,values);
-              if (validinput)
-                  maxverts = (int)values[0];
-
-          }
-          // vertex command
-          else if (cmd == "vertex")
-          {
-              if (vertInd + 1 > maxverts)
-                // More vertices read than maxverts
-                cerr << "Reached Maximum Number of vertex " << maxverts << " Will ignore further vertices\n";
-              else
-              {
-                  validinput = readvals(s,3,values);
-                  if (validinput)
-                  {
-                      for (int i  = 0; i < 3; i ++)
-                      {
-                          if (value[i][0] == '+')
-                              vertArray[vertInd][i] = int(values[i][1]-'0');
-                          else
-                              vertArray[vertInd][i] = stoi(values[i]);
-                      }
-                      // vertArray[vertInd][0] = values[0]; // x
-                      // vertArray[vertInd][1] = values[1]; // y
-                      // vertArray[vertInd][2] = values[2]; // z
-                  }
-                  vertInd ++;
-              }
-          }
-          else if (cmd == "tri")
-          {
-              validinput = readvals(s,3,values);
-              if (validinput)
-              {
-                  triVec.push(values[0]); // coord 1
-                  triVec.push(values[1]); // coord 2
-                  triVec.push(values[2]); // coord 3
-              }
-              triNum ++;
-          }
-          else if (cmd == "sphere")
-          {
-              validinput = readvals(s,4,values);
-              if (validinput)
-              {
-                  for (int i  = 0; i < 4; i ++)
-                  {
-                      if (value[i][0] == '+')
-                          sphereVec[sphereInd][i] = 0.5;
-                      else
-                          // assume this works for now
-                          sphereVec[sphereInd][i] = stod(values[i]);
-                  }
-              }
-              triNum ++;
-          }
-          else {
-            cerr << "Unknown Command: " << cmd << " Skipping \n";
-          }
         }
-        getline (in, str);
+            getline (in, str);
       }
 
       // Set up initial position for eye, up and amount
       // As well as booleans
 
-      eye = eyeinit;
-      up = upinit;
-      amount = amountinit;
-      sx = sy = 1.0;  // keyboard controlled scales in x and y
-      tx = ty = 0.0;  // keyboard controllled translation in x and y
-      useGlu = false; // don't use the glu perspective/lookat fns
-
-      glEnable(GL_DEPTH_TEST);
-    } else {
-      cerr << "Unable to Open Input Data File " << filename << "\n";
-      throw 2;
+    //   eye = eyeinit;
+    //   up = upinit;
+    //   amount = amountinit;
+    //   sx = sy = 1.0;  // keyboard controlled scales in x and y
+    //   tx = ty = 0.0;  // keyboard controllled translation in x and y
+    //   useGlu = false; // don't use the glu perspective/lookat fns
+    //
+    //   glEnable(GL_DEPTH_TEST);
+    // } else {
+    //   cerr << "Unable to Open Input Data File " << filename << "\n";
+    //   throw 2;
     }
 }
 
 // main render function
 void Scene::render()
 {
-    while (!sampler.generateSample(&sample)
+    while (!sampler->getSample(sample))
     {
-        camera.generateRay(sample, &ray);
-        raytracer.trace(ray, &color);
-        film.commit(sample, color);
+        camera->generateRay(*sample, ray);
+        //raytracer.trace(ray, &color);
+        film->commit(*sample, *color);
     }
-    film.writeImage();
+    film->writeImage();
 }

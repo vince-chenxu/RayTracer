@@ -1,6 +1,7 @@
+#ifndef RAY_H
+#define RAY_H
 #include "Point.h"
-#include "Vector.h"
-using namespace std;
+//using namespace std;
 
 class Ray
 {
@@ -13,7 +14,10 @@ public:
     // destructor
     ~Ray();
 private:
-    Point pos
-    Vector dir
-    float t_min, t_max
+    Point pos;
+    Vector dir;
+    float t_min, t_max;
 };
+
+
+#endif // RAY_H

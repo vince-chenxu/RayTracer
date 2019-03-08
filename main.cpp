@@ -1,4 +1,4 @@
-#include "Scene.cpp"
+#include "Scene.h"
 #include <iostream>
 
 using namespace std;
@@ -10,5 +10,6 @@ int main(int argc, char* argv[])
 
     // delcare and initialize a scene object with the given filename;
     Scene scene(argv[1]);
+    //scene.render();
     //scene.initialize();
 }

@@ -1,5 +1,4 @@
 #include "Vector.h"
-#include <iostream>
 
 using namespace std;
 
@@ -21,22 +20,22 @@ Vector::~Vector()
     // called automatically by the system
 }
 // overload + operator
-Vector::Vector operator+(Vector other)
+Vector operator +(const Vector& left, const Vector& right)
 {
-    return Vector(x + other.x, y + other.y, z + other.z);
+    return Vector(left.x + right.x, left.y + right.y, left.z + right.z);
 }
 // overload - operator
-Vector::Vector operator-(Vector other)
+Vector operator -(const Vector& left, const Vector& right)
 {
-    return Vector(x - other.x, y - other.y, z - other.z);
+    return Vector(left.x - right.x, left.y - right.y, left.z - right.z);
 }
 // overload * operator
-Vector::Vector operator*(float scalar)
+Vector Vector::operator*(float scalar)
 {
     return Vector(x * scalar, y * scalar, z * scalar);
 }
 // overload / operator
-Vector operator/(float scalar)
+Vector Vector::operator/(float scalar)
 {
     // here we assume scalar != 0, may need to implement error checking later
     return Vector(x / scalar, y / scalar, z / scalar);
@@ -54,11 +53,16 @@ void Vector::normalize()
     }
 }
 
-Vector::Vector cross(const Vector& left, const Vector& right)
+Vector Vector::cross(const Vector& left, const Vector& right)
 {
-    vec3 leftV = vec3(left.x, left.y, left.z);
-    vec3 rightV = vec3(right.x, right.y, right.z);
-    vec3 w = glm::cross(leftV, rightV);
+    glm::vec3 leftV = glm::vec3(left.x, left.y, left.z);
+    glm::vec3 rightV = glm::vec3(right.x, right.y, right.z);
+    glm::vec3 w = glm::cross(leftV, rightV);
     return Vector(w.x, w.y, w.z);
 
+}
+
+void Vector::print()
+{
+    cout << "x: " << x << " y: " << y << " z: " << z << endl;
 }

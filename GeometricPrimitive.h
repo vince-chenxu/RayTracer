@@ -1,6 +1,9 @@
+#ifndef GEOMETRICPRIMITIVE_H
+#define GEOMETRICPRIMITIVE_H
+#include "Primitive.h"
 using namespace std;
 
-class GeometricPrimitive
+class GeometricPrimitive : public Primitive
 {
 public:
     GeometricPrimitive();
@@ -13,3 +16,6 @@ private:
     Shape* shape;
     Material* mat;
 };
+
+
+#endif // GEOMETRICPRIMITIVE_H

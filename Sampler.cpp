@@ -1,5 +1,4 @@
 #include "Sampler.h"
-#include <iostream>
 
 using namespace std;
 
@@ -44,4 +43,10 @@ bool Sampler::getSample(Sample* sample)
         currentY++;
     }
     return true;
+}
+
+void Sampler::print()
+{
+    cout << "width: " << width << " height: " << height << endl;
+    cout << "currentX: " << currentX << " currentY: " << currentY << endl;
 }

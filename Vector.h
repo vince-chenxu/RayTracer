@@ -1,5 +1,10 @@
+#ifndef VECTOR_H
+#define VECTOR_H
 #include <vector>
 #include <cmath>
+#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 using namespace std;
 
 class Vector
@@ -18,9 +23,11 @@ public:
     // destructor
     ~Vector();
     // overload + operator
-    Vector operator+(Vector other);
+    friend Vector operator +(const Vector& left, const Vector& right);
+    //Vector operator+(Vector other);
     // overload - operator
-    Vector operator-(Vector other);
+    friend Vector operator -(const Vector& left, const Vector& right);
+    //Vector operator-(Vector other);
     // overload * operator
     Vector operator*(float scalar);
     // overload / operator
@@ -28,7 +35,10 @@ public:
     // normalize function
     void normalize();
     Vector cross(const Vector& left, const Vector& right);
-
-private:
+    void print();
+// private:
     float x, y, z;
 };
+
+
+#endif // VECTOR_H

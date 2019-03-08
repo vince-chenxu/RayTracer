@@ -1,3 +1,7 @@
+#ifndef SAMPLER_H
+#define SAMPLER_H
+#include "Sample.h"
+#include <iostream>
 using namespace std;
 
 class Sampler
@@ -15,8 +19,12 @@ public:
     Sampler(int w, int h);
     bool getSample(Sample* sample);
     //bool getSample(float x, float y);
+    void print();
 private:
     int width, height;
     // current pixel tracker (x,y), assume 1 sample per pixel
     int currentX, currentY;
 };
+
+
+#endif // SAMPLER_H

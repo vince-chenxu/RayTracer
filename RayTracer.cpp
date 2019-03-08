@@ -4,14 +4,19 @@ using namespace std;
 
 void RayTracer::trace(Ray& ray, int depth, Color* color)
 {
-    if (depth exceed some threshold)
+    if (depth > threshold)
     {
-        Make the color black and return
+        // depth exceeds the threshold
+        // Make the color black and return
+        *color = Color(0.0f, 0.0f, 0.0f);
+        return;
     }
     if (!primitive.intersect(ray, &thit, &in)
     {
         // No intersection
-        Make the color black and return
+        // Make the color black and return
+        *color = Color(0.0f, 0.0f, 0.0f);
+        return;
     }
     // Obtain the brdf at intersection point
     in.primitive->getBRDF(in.local, &brdf);

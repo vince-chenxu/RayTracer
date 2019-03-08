@@ -1,3 +1,5 @@
+#ifndef SAMPLE_H
+#define SAMPLE_H
 #include <iostream>
 using namespace std;
 
@@ -11,3 +13,5 @@ public:
 
     float x, y; // store member coords
 };
+
+#endif // SAMPLE_H

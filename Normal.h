@@ -1,3 +1,5 @@
+#ifndef NORMAL_H
+#define NORMAL_H
 using namespace std;
 
 class Normal
@@ -22,3 +24,6 @@ public:
 private:
     float x, y, z;
 };
+
+
+#endif // NORMAL_H

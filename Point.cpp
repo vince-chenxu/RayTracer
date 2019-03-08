@@ -1,7 +1,5 @@
 #include "Point.h"
-#include <iostream>
 
-using namespace std;
 
 // default constructor
 Point::Point()
@@ -16,12 +14,17 @@ Point::Point(float x_val, float y_val, float z_val)
     z = z_val;
 }
 // overload + operator
-Point::Point operator +(const Point& left, const Point& right)
+Point operator +(const Point& left, const Point& right)
 {
     return Point(left.x + right.x, left.y + right.y, left.z + right.z);
 }
 // overload - operator
-Point::Point operator -(const Point& left, const Point& right)
+Vector operator -(const Point& left, const Point& right)
 {
     return Vector(left.x - right.x, left.y - right.y, left.z - right.z);
+}
+
+void Point::print()
+{
+    cout << "x: " << x << " y: " << y << " z: " << z << endl;
 }

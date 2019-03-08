@@ -1,3 +1,7 @@
+#ifndef COLOR_H
+#define COLOR_H
+#include <iostream>
+
 using namespace std;
 
 class Color
@@ -19,6 +23,10 @@ public:
     Color operator*(float scalar);
     // overload / operator
     Color operator/(float scalar);
-private:
+    void print();
+//private:
     float r, g, b;
 };
+
+
+#endif // COLOR_H

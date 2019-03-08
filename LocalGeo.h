@@ -1,3 +1,5 @@
+#ifndef LOCALGEO_H
+#define LOCALGEO_H
 using namespace std;
 
 class LocalGeo
@@ -11,7 +13,11 @@ public:
     LocalGeo();
     // constructor
     LocalGeo(Point p, Normal n);
+    ~LocalGeo();
 private:
     Point pos
     Normal normal
 };
+
+
+#endif // LOCALGEO_H

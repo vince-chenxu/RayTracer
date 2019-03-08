@@ -1,3 +1,5 @@
+#ifndef MATERIAL_H
+#define MATERIAL_H
 using namespace std;
 
 class Material
@@ -8,5 +10,8 @@ class Material
 public:
     void getBRDF(LocalGeo& local, BRDF* brdf);
 private:
-    BRDF constantBRDF;   
+    BRDF constantBRDF;
 };
+
+
+#endif // MATERIAL_H

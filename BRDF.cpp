@@ -11,3 +11,8 @@ BRDF::BRDF(Color kd_v, Color ks_v, Color ka_v, Color kr_v)
     ka = ka_v;
     kr = kr_v;
 }
+
+BRDF::~BRDF()
+{
+    
+}

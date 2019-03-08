@@ -7,6 +7,8 @@ using namespace std;
 LocalGeo::LocalGeo()
 {
     // empty for now
+    pos = Point();
+    normal = Normal();
 }
 // constructor
 LocalGeo::LocalGeo(Point p, Normal n)
@@ -14,4 +16,8 @@ LocalGeo::LocalGeo(Point p, Normal n)
     // may need to implement copy constructors
     pos = p;
     normal = n;
+}
+LocalGeo::~LocalGeo()
+{
+
 }

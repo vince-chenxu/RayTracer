@@ -1,6 +1,6 @@
 using namespace std;
 
-class AggregatePrimitive
+class AggregatePrimitive : public Primitive
 {
 public:
     // Constructor store the STL vector of pointers to primitives.
