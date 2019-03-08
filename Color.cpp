@@ -49,5 +49,5 @@ Color Color::operator/(float scalar)
 
 void Color::print()
 {
-    cout << "r: " << r << " g: " << g << " b: " << b << endl; 
+    cout << "r: " << r << " g: " << g << " b: " << b << endl;
 }

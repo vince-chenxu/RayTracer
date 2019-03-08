@@ -2,8 +2,11 @@
 // #include "Point.h"
 #include "Film.h"
 #include "Camera.h"
-
+//#include "Shape.h"
 #include "Sampler.h"
+#include "Vertex.h"
+#include "Tri.h"
+#include "Sph.h"
 // #include "Color.h"
 // #include "Ray.h"
 // #include "Film.h"
@@ -14,6 +17,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <vector>
 using namespace std;
 
 class Scene
@@ -24,7 +28,7 @@ public:
     // constructor with single const char* filename
     Scene(const char* filename);
     // helper function for loadFromFile
-    bool readvals (stringstream &s, const int numvals, string values[]);
+    bool readvals (stringstream &s, const int numvals, float values[]);
     // function to readfile
     void loadFromFile(const char* fileName);
     // function for the main rendering loop
@@ -32,7 +36,7 @@ public:
 // private member variables
 private:
     // // width and height of the window/scene
-    int width, height;
+    int width, height, maxverts;
     // pointers to Point objects: lookFrom, lookAt
     Point* lookFrom;
     Point* lookAt;
@@ -52,4 +56,10 @@ private:
     Ray* ray;
     Color* color;
     Camera* camera;
+    // vector that holds all vertices
+    vector<Vertex> vertex;
+    // vector that holds all triangle coords
+    vector<Tri> tri;
+    // vector that holds all sphere coords with radius
+    vector<Sph> sph;
 };

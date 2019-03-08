@@ -16,7 +16,7 @@ Scene::Scene(const char* filename)
 }
 
 // help function much like the one from HW2
-bool Scene::readvals (stringstream &s, const int numvals, string values[])
+bool Scene::readvals (stringstream &s, const int numvals, float values[])
 {
     for (int i = 0; i < numvals; i++)
     {
@@ -50,7 +50,7 @@ void Scene::loadFromFile(const char* filename)
                 s >> cmd;
                 // cout << cmd << endl;
                 int i;
-                string values[10]; // Position and color for light, colors for others
+                float values[10]; // Position and color for light, colors for others
                 // Up to 10 params for cameras.
                 bool validinput; // Validity of input
 
@@ -66,7 +66,7 @@ void Scene::loadFromFile(const char* filename)
                     {
 
                         //width = (int) values[0]; height = (int) values[1];
-                        width = stoi(values[0]); height = stoi(values[1]);
+                        width = values[0]; height = values[1];
                     }
                 }
 
@@ -78,12 +78,12 @@ void Scene::loadFromFile(const char* filename)
                     {
                         // // lookFrom
                         // //vec3 from = vec3(values[0],values[1],values[2]);
-                        lookFrom = new Point(stof(values[0]), stof(values[1]), stof(values[2]));
+                        lookFrom = new Point(values[0], values[1], values[2]);
                         cout << "printing Point lookFrom\n";
                         lookFrom->print();
                         // // lookAt
                         // //vec3 at = vec3(values[3],values[4],values[5]);
-                        lookAt = new Point(stof(values[3]), stof(values[4]), stof(values[5]));
+                        lookAt = new Point(values[3], values[4], values[5]);
                         cout << "printing Point lookAt\n";
                         lookAt->print();
                         //center = at;
@@ -95,11 +95,11 @@ void Scene::loadFromFile(const char* filename)
                         // Transform the vector by calling upvector function
                         //upinit = Transform::upvector(upinit,eyeDirection);
                         // up
-                        up = new Vector(stof(values[6]), stof(values[7]), stof(values[8]));
+                        up = new Vector(values[6], values[7], values[8]);
                         cout << "printing Vector up\n";
                         up->print();
                         // Set fovy value
-                        fov = stof(values[9]);
+                        fov = values[9];
                         cout << "printing fov value\n";
                         cout << fov << endl;
                         // declare Sampler object for later sample calculations
@@ -136,7 +136,9 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        // ka = new Color(values[0],values[1],values[2]);
+                        ka = new Color(values[0],values[1],values[2]);
+                        cout << "ambient: ";
+                        ka->print();
                     }
                 }
                 // diffuse command
@@ -146,7 +148,9 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        // kd = new Color(values[0],values[1],values[2]);
+                        kd = new Color(values[0],values[1],values[2]);
+                        cout << "diffuse: ";
+                        kd->print();
                     }
                 }
                 // specular command
@@ -156,13 +160,23 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        // ks = new Color(values[0],values[1],values[2]);
+                        ks = new Color(values[0],values[1],values[2]);
+                        cout << "specular: ";
+                        ks->print();
                     }
+                }
+                else if (cmd == "maxverts")
+                {
+                    validinput = readvals(s,1,values);
+                    if (validinput)
+                        maxverts = (int)values[0];
+                    cout << "maxverts: " << maxverts << endl;
+
                 }
                 // vertex command
                 else if (cmd == "vertex")
                 {
-                    if (vertInd + 1 > maxverts)
+                    if (vertex.size() >= maxverts)
                       // More vertices read than maxverts
                       cerr << "Reached Maximum Number of vertex " << maxverts << " Will ignore further vertices\n";
                     else
@@ -170,18 +184,19 @@ void Scene::loadFromFile(const char* filename)
                         validinput = readvals(s,3,values);
                         if (validinput)
                         {
-                            for (int i  = 0; i < 3; i ++)
-                            {
-                                if (value[i][0] == '+')
-                                    vertArray[vertInd][i] = int(values[i][1]-'0');
-                                else
-                                    vertArray[vertInd][i] = stoi(values[i]);
-                            }
+                            // for (int i  = 0; i < 3; i ++)
+                            // {
+                            //     if (value[i][0] == '+')
+                            //         vertArray[vertInd][i] = int(values[i][1]-'0');
+                            //     else
+                            //         vertArray[vertInd][i] = stoi(values[i]);
+                            // }
                             // vertArray[vertInd][0] = values[0]; // x
                             // vertArray[vertInd][1] = values[1]; // y
                             // vertArray[vertInd][2] = values[2]; // z
+                            vertex.push_back(Vertex(values[0], values[1], values[2]));
                         }
-                        vertInd ++;
+                        //vertInd ++;
                     }
                 }
                 else if (cmd == "tri")
@@ -189,11 +204,24 @@ void Scene::loadFromFile(const char* filename)
                     validinput = readvals(s,3,values);
                     if (validinput)
                     {
-                        triVec.push(values[0]); // coord 1
-                        triVec.push(values[1]); // coord 2
-                        triVec.push(values[2]); // coord 3
+                        // triVec.push(values[0]); // coord 1
+                        // triVec.push(values[1]); // coord 2
+                        // triVec.push(values[2]); // coord 3
+                        tri.push_back(Tri(values[0], values[1], values[2]));
                     }
-                    triNum ++;
+                    //triNum ++;
+                }
+                else if (cmd == "sphere")
+                {
+                    validinput = readvals(s,4,values);
+                    if (validinput)
+                    {
+                        // triVec.push(values[0]); // coord 1
+                        // triVec.push(values[1]); // coord 2
+                        // triVec.push(values[2]); // coord 3
+                        sph.push_back(Sph(values[0], values[1], values[2], values[3]));
+                    }
+                    //triNum ++;
                 }
 
                 // Material Commands
@@ -460,6 +488,19 @@ void Scene::loadFromFile(const char* filename)
 // main render function
 void Scene::render()
 {
+    // check vertices
+    cout << "Printing all vertices:\n";
+    for (int i = 0; i < vertex.size(); i ++)
+        vertex[i].print();
+    // check triangles
+    cout << "Printing all triangles\n";
+    for (int i = 0; i < tri.size(); i ++)
+        tri[i].print();
+    // check spheres
+    cout << "Printing all spheres\n";
+    for (int i = 0; i < sph.size(); i ++)
+        sph[i].print();
+
     while (!sampler->getSample(sample))
     {
         camera->generateRay(*sample, ray);
