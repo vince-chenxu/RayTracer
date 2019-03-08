@@ -23,12 +23,12 @@ Sphere::Sphere(float c1, float c2, float c3, float r)
 bool Sphere::intersect(Ray& ray, float* thit, LocalGeo* local) {
     Point e = ray.getPos();
     Vector d = ray.getDir();
-    Vector* e_vec = new Vector(e.x, e.y, e.z);
-    Vector* c = new Vector(center->x, center->y, center->z);
+    Vector e_vec = Vector(e.x, e.y, e.z);
+    Vector c = Vector(center->x, center->y, center->z);
 
     float a_ = d.dot(d, d);
-    float b_ = d.dot(d * (float)2, *e_vec - *c);
-    float c_ = d.dot(*e_vec - *c, *e_vec - *c) - radius * radius;
+    float b_ = d.dot(d * (float)2, e_vec - c);
+    float c_ = d.dot(e_vec - c, e_vec - c) - radius * radius;
 
     float d_ = b_ * b_ - 4 * a_ * c_;
 
@@ -38,34 +38,26 @@ bool Sphere::intersect(Ray& ray, float* thit, LocalGeo* local) {
 
     d_ = sqrt(d_);
 
-    float t0 = (-1 * b_ + d_) / 2 * a_;
-    float t1 = (-1 * b_ - d_) / 2 * a_;
+    float t0 = (-1 * b_ - d_) / (2 * a_);
+    float t1 = (-1 * b_ + d_) / (2 * a_);
 
     if (t1 > 0 && t0 > 0) {
-        if (t0 < t1) {
-            *thit = t0;
-        } else {
-            *thit = t1;
-        }
+        *thit = t0;
     }
     if (t1 < 0 && t0 < 0) {
-        if (t0 < t1) {
-            *thit = t1;
-        } else {
-            *thit = t0;
-        }
+        return false;
     }
     if (t0 == t1) {
         *thit = t0;
     }
-    if ((t1 < 0 && t0 > 0) || (t1 > 0 && t0 < 0)) {
-        return false;
+    if (t0 < 0 && t1 > 0) {
+        *thit = t1;
     }
 
-    Vector p = *e_vec + d * *thit;
+    Vector p = e_vec + d * (*thit);
     local->pos = new Point(p.x, p.y, p.z);
 
-    Vector n = p - *c;
+    Vector n = p - c;
     n.normalize();
     local->normal = new Normal(n.x, n.y, n.z);
 

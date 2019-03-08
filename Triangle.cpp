@@ -24,15 +24,16 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     Vector dir = ray.getDir();
 
     Vector v31 = *v3 - *v1;
-    Vector n = v31.cross(v31, v31);
+    Vector v21 = *v2 - *v1;
+    Vector n = v31.cross(v31, v21);
     n.normalize();
 
     // Need to have dot function in Vector class, also Point dot Vector
-    Vector* pos_vec = new Vector(pos.x, pos.y, pos.z);
+    Vector pos_vec = Vector(pos.x, pos.y, pos.z);
 
     // V31, v1->x, v1->y, v1->z
     float temp1 = v31.dot(Vector(v1->x, v1->y, v1->z), n);
-    float temp2 = v31.dot(*pos_vec, n);
+    float temp2 = v31.dot(pos_vec, n);
     float temp3 = v31.dot(dir, n);
 
     *thit = (temp1 - temp2) / temp3;
@@ -41,11 +42,11 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
         return false;
     }
 
-    Vector p = *pos_vec + dir * (*thit);
+    Vector p = pos_vec + dir * (*thit);
 
-    Point* p_point = new Point(p.x, p.y, p.z);
+    //Point p_point = Point(p.x, p.y, p.z);
 
-    Vector cur1 = *p_point - *v1;
+    Vector cur1 = p - *v1;
     Vector cur2 = *v2 - *v1;
     Vector cur3 = *v3 - *v1;
 
@@ -53,15 +54,13 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     float b = (cur1.x - r * cur3.x) / cur2.x;
 
     if (b >= 0.0 && b <= 1.0 && r >= 0.0 && r <= 1.0 && (r + b) <= 1.0) {
-        return false;
+        local->pos = new Point(p.x, p.y, p.z);
+        local->normal = new Normal(n.x, n.y, n.z);
+
+        return true;
     }
 
-    local->pos = new Point(p.x, p.y, p.z);
-    local->normal = new Normal(n.x, n.y, n.z);
-
-    // IMPORTANT: need to deal with no intersection with triangle
-
-    return true;
+    return false;
 }
 
 // Same as intersect, but just return whether there is any intersection or
