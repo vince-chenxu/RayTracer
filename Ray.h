@@ -11,12 +11,18 @@ public:
     Ray();
     // constructor with Point position, Vector direction, min and max
     Ray(Point position, Vector direction, float min, float max);
+
+    Point getPos();
+    Vector getDir();
+    float getMax();
+    float getMin();
     // destructor
     ~Ray();
 private:
     Point pos;
     Vector dir;
-    float t_min, t_max;
+    float t_min;
+    float t_max;
 };
 
 

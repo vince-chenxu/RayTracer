@@ -7,6 +7,8 @@ using namespace std;
 class Triangle : public Shape
 {
 public:
+    Triangle();
+    Triangle(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3);
     // The intersection with the ray at t outside the range [t_min, t_max]
     // should return false.
 
@@ -17,6 +19,11 @@ public:
     // Same as intersect, but just return whether there is any intersection or
     // not
     bool intersectP(Ray& ray);
+
+private:
+    Point* v1;
+    Point* v2;
+    Point* v3;
 
 };
 

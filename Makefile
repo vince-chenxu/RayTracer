@@ -15,8 +15,8 @@ endif
 
 RM = /bin/rm -f
 all: RayTracer
-RayTracer: main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Scene.h Point.h Vector.h Sample.h Sampler.h Color.h Ray.h Film.h Camera.h Vertex.h Tri.h Sph.h
-	$(CC) $(CFLAGS) -o RayTracer main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o $(INCFLAGS) $(LDFLAGS)
+RayTracer: main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Triangle.o Sphere.o Scene.h Point.h Vector.h Sample.h Sampler.h Color.h Ray.h Film.h Camera.h Vertex.h Tri.h Sph.h Triangle.h Sphere.h
+	$(CC) $(CFLAGS) -o RayTracer main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Triangle.o Sphere.o $(INCFLAGS) $(LDFLAGS)
 main.o: main.cpp Scene.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c main.cpp
 Scene.o: Scene.cpp Scene.h
@@ -43,5 +43,9 @@ Tri.o: Tri.cpp Tri.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Tri.cpp
 Sph.o: Sph.cpp Sph.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Sph.cpp
+Triangle.o: Triangle.cpp Triangle.h
+	$(CC) $(CFLAGS) $(INCFLAGS) -c Triangle.cpp
+Sphere.o: Sphere.cpp Sphere.h
+	$(CC) $(CFLAGS) $(INCFLAGS) -c Sphere.cpp
 clean:
 	$(RM) *.o RayTracer *.png

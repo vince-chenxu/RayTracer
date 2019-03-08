@@ -35,6 +35,7 @@ public:
     // normalize function
     void normalize();
     Vector cross(const Vector& left, const Vector& right);
+    float dot(const Vector& left, const Vector& right);
     void print();
 // private:
     float x, y, z;

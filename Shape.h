@@ -1,5 +1,8 @@
 #ifndef SHAPE_H
 #define SHAPE_H
+
+#include "Ray.h"
+#include "LocalGeo.h"
 using namespace std;
 
 // parent class for triangle and sphere
@@ -12,11 +15,16 @@ public:
 
     // Test if ray intersects with the shape or not (in object space), if so,
     // return intersection point and normal
-    virtual bool intersect(Ray& ray, float* thit, LocalGeo* local);
+    // virtual bool intersect(Ray& ray, float* thit, LocalGeo* local);
+    //
+    // // Same as intersect, but just return whether there is any intersection or
+    // // not
+    // virtual bool intersectP(Ray& ray);
+    bool intersect(Ray& ray, float* thit, LocalGeo* local);
 
     // Same as intersect, but just return whether there is any intersection or
     // not
-    virtual bool intersectP(Ray& ray);
+    bool intersectP(Ray& ray);
 
 };
 

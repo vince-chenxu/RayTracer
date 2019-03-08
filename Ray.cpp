@@ -19,6 +19,20 @@ Ray::Ray(Point position, Vector direction, float min, float max)
     t_max = max;
 }
 
+Point Ray::getPos() {
+    return pos;
+}
+
+Vector Ray::getDir() {
+    return dir;
+}
+
+float Ray::getMax() {
+    return t_max;
+}
+float Ray::getMin() {
+    return t_min;
+}
 // destructor
 Ray::~Ray()
 {

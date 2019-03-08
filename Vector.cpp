@@ -62,6 +62,15 @@ Vector Vector::cross(const Vector& left, const Vector& right)
 
 }
 
+float Vector::dot(const Vector& left, const Vector& right)
+{
+    glm::vec3 leftV = glm::vec3(left.x, left.y, left.z);
+    glm::vec3 rightV = glm::vec3(right.x, right.y, right.z);
+    float w = glm::dot(leftV, rightV);
+    return w;
+
+}
+
 void Vector::print()
 {
     cout << "x: " << x << " y: " << y << " z: " << z << endl;

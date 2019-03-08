@@ -9,11 +9,11 @@ Intersection::Intersection()
 
 }
 // constructor
-Intersection::Intersection(LocalGeo geo, Primitive* prim)
+Intersection::Intersection(LocalGeo geo, Shape* s)
 {
     // may need to implement copy contructor for corresponding classes
     locaoGeo = geo;
-    primitive = prim;
+    shape = s;
 }
 // destructor
 Intersection::~Intersection()

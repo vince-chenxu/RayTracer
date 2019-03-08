@@ -7,6 +7,9 @@ using namespace std;
 class Sphere : public Shape
 {
 public:
+    Sphere();
+    // constructor
+    Sphere(float c1, float c2, float c3, float r);
     // The intersection with the ray at t outside the range [t_min, t_max]
     // should return false.
 
@@ -17,6 +20,9 @@ public:
     // Same as intersect, but just return whether there is any intersection or
     // not
     bool intersectP(Ray& ray);
+private:
+    Point* center;
+    float radius;
 
 };
 
