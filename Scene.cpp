@@ -517,7 +517,8 @@ void Scene::render()
         //cout << "Printing sampler\n";
         //sampler->print();
         camera->generateRay(sample, &ray);
-        raytracer.trace(ray, 10, &color, shape);
+        raytracer.trace(ray, 0, &color, shape);
+        //color.print();
         film->commit(sample, color);
     }
     film->writeImage();

@@ -20,7 +20,7 @@ public:
     // destructor
     ~Film();
     // Will write the color to (sample.x, sample.y) on the image
-    void commit(Sample& sample, Color& color);
+    void commit(Sample& sample, Color color);
     // Output image to a file
     void writeImage();
 private:

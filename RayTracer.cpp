@@ -2,16 +2,24 @@
 
 using namespace std;
 
-void RayTracer::trace(Ray& ray, int depth, Color& color, vector<Shape*> shape)
+
+RayTracer::RayTracer()
 {
+    threshold = 20;
+}
+void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Shape*> shape)
+{
+    // hardcode threshold
+
     if (depth > threshold)
     {
         // depth exceeds the threshold
         // Make the color black and return
-        color = Color(0.0f, 0.0f, 0.0f);
+        *color = Color(0.0f, 0.0f, 0.0f);
+        cout << "depth > threshold returning now\n";
         return;
     }
-    Intersection in;
+    LocalGeo in;
     BRDF brdf;
     float thit;
     //if (!primitive.intersect(ray, &thit, &in)
@@ -22,20 +30,28 @@ void RayTracer::trace(Ray& ray, int depth, Color& color, vector<Shape*> shape)
     //     *color = Color(0.0f, 0.0f, 0.0f);
     //     return;
     // }
-
+    bool intersected = false;
     // here we loop through all shapes
+    cout << "about to loop through all shapes\n";
     for (int i = 0; i < shape.size(); i ++)
     {
         // here check for the min distance
-        if (!shape[i]->intersect(ray, &thit, &in))
+        if (shape[i]->intersect(ray, &thit, &in))
         {
             // No intersection
             // Make the color black and return
-            color = Color(0.0f, 0.0f, 0.0f);
-            return;
+            cout << "shape #" << i + 1 << " intersected with ray" << endl;
+            *color = Color(0.5f, 0.5f, 0.5f);
+            intersected = true;
         }
+        else
+            cout << "no intersection at shape #" << i + 1 << endl;
 
     }
+    // no intersection
+    if (!intersected)
+        *color = Color(0.0f, 0.0f, 0.0f);
+
 
     // Obtain the brdf at intersection point
     // in.primitive->getBRDF(in.local, &brdf);

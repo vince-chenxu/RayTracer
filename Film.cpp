@@ -29,9 +29,10 @@ Film::~Film()
     // free memory allocation for pixels
     delete[] pixels;
 }
-void Film::commit(Sample& sample, Color& color)
+void Film::commit(Sample& sample, Color color)
 {
     // to prevent it goes out of bound
+    color.print();
     c.rgbRed = min((color.r * 255.0f), 255.0f);
     c.rgbGreen = min((color.g * 255.0f), 255.0f);
     c.rgbBlue = min((color.b * 255.0f), 255.0f);

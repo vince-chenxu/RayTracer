@@ -5,6 +5,7 @@
 #include "Color.h"
 #include "BRDF.h"
 #include "Shape.h"
+#include "LocalGeo.h"
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -12,7 +13,8 @@ using namespace std;
 class RayTracer
 {
 public:
-    void trace(Ray& ray, int depth, Color& color, vector<Shape*> shape);
+    RayTracer();
+    void trace(Ray& ray, int depth, Color* color, vector<Shape*> shape);
 
 private:
     // member variables
