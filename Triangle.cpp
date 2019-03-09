@@ -9,11 +9,12 @@ Triangle::Triangle()
     // empty for now
 }
 // constructor
-Triangle::Triangle(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3)
+Triangle::Triangle(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, Color c)
 {
     v1 = new Point((float) x1, (float) y1, (float) z1);
     v2 = new Point((float) x2, (float) y2, (float) z2);
     v3 = new Point((float) x3, (float) y3, (float) z3);
+    color = new Color(c.r, c.g, c.b);;
 }
 // Test if ray intersects with the shape or not (in object space), if so,
 // return intersection point and normal
@@ -80,4 +81,9 @@ void Triangle::print()
     v2->print();
     cout << "Vertex3: ";
     v3->print();
+}
+
+Color Triangle::getColor()
+{
+    return *color;
 }

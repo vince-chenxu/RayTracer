@@ -139,6 +139,11 @@ void Scene::loadFromFile(const char* filename)
                         ka = new Color(values[0],values[1],values[2]);
                         cout << "ambient: ";
                         ka->print();
+                        // cout << "about to seg fault\n";
+                        // if (shape.size() > 0)
+                        // shape[shape.size()]->color = new Color(values[0],values[1],values[2]);
+                        // else
+                            // shape[0]->color = *ka;
                     }
                 }
                 // diffuse command
@@ -210,8 +215,7 @@ void Scene::loadFromFile(const char* filename)
                         tri.push_back(Tri(values[0], values[1], values[2]));
                         shape.push_back(new Triangle(vertex[int(values[0])].x, vertex[int(values[0])].y, vertex[int(values[0])].z,
                                                  vertex[int(values[1])].x, vertex[int(values[1])].y, vertex[int(values[1])].z,
-                                                 vertex[int(values[2])].x, vertex[int(values[2])].y, vertex[int(values[2])].z));
-
+                                                 vertex[int(values[2])].x, vertex[int(values[2])].y, vertex[int(values[2])].z, *ka));
                     }
                     //triNum ++;
                 }
@@ -224,7 +228,7 @@ void Scene::loadFromFile(const char* filename)
                         // triVec.push(values[1]); // coord 2
                         // triVec.push(values[2]); // coord 3
                         sph.push_back(Sph(values[0], values[1], values[2], values[3]));
-                        shape.push_back(new Sphere(values[0], values[1], values[2], values[3]));
+                        shape.push_back(new Sphere(values[0], values[1], values[2], values[3], *ka));
                     }
                     //triNum ++;
                 }
@@ -517,11 +521,12 @@ void Scene::render()
         //cout << "Printing sampler\n";
         //sampler->print();
         camera->generateRay(sample, &ray);
-        cout << "Ray: \n";
-        ray.print();
+        //cout << "Ray: \n";
+        //ray.print();
         raytracer.trace(ray, 0, &color, shape);
         //color.print();
         film->commit(sample, color);
     }
     film->writeImage();
+    cout << "There are total of " << shape.size() << " objects\n";
 }

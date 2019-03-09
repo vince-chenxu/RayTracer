@@ -3,6 +3,7 @@
 
 #include "Ray.h"
 #include "LocalGeo.h"
+#include "Color.h"
 using namespace std;
 
 // parent class for triangle and sphere
@@ -26,7 +27,7 @@ public:
     // not
     virtual bool intersectP(Ray& ray) = 0;
     virtual void print();
-
+    virtual Color getColor() = 0;
 };
 
 #endif // SHAPE_H

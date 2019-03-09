@@ -9,10 +9,11 @@ Sphere::Sphere()
     // empty for now
 }
 // constructor
-Sphere::Sphere(float c1, float c2, float c3, float r)
+Sphere::Sphere(float c1, float c2, float c3, float r, Color c)
 {
     center = new Point(c1, c2, c3);
     radius = r;
+    color = new Color(c.r, c.g, c.b);
 }
 
 // The intersection with the ray at t outside the range [t_min, t_max]
@@ -77,4 +78,9 @@ void Sphere::print()
     cout << "center coordinates: ";
     center->print();
     cout << "radius: " << radius << endl;
+}
+
+Color Sphere::getColor()
+{
+    return *color;
 }

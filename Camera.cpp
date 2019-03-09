@@ -25,7 +25,7 @@ void Camera::generateRay(Sample& sample, Ray* ray)
 {
 
     // a = eye
-    Vector a = lookAt - lookFrom;
+    Vector a = lookFrom - lookAt;
     // normalize a to get w
     a.normalize();
     // calculate u

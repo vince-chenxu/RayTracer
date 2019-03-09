@@ -1,6 +1,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 #include "Shape.h"
+#include "Color.h"
 using namespace std;
 
 // parent class for triangle and sphere
@@ -9,7 +10,7 @@ class Sphere : public Shape
 public:
     Sphere();
     // constructor
-    Sphere(float c1, float c2, float c3, float r);
+    Sphere(float c1, float c2, float c3, float r, Color c);
     // The intersection with the ray at t outside the range [t_min, t_max]
     // should return false.
 
@@ -20,11 +21,12 @@ public:
     // Same as intersect, but just return whether there is any intersection or
     // not
     bool intersectP(Ray& ray);
+    Color getColor();
     void print();
-private:
+// private:
     Point* center;
     float radius;
-
+    Color* color;
 };
 
 #endif // SPHERE_H
