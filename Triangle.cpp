@@ -44,51 +44,30 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     }
 
     Vector p = pos_vec + dir * (*thit);
-
+    Vector vt_1 = Vector(v1->x, v1->y, v1->z);
+    Vector vt_2 = Vector(v2->x, v2->y, v2->z);
+    Vector vt_3 = Vector(v3->x, v3->y, v3->z);
     Point p_point = Point(p.x, p.y, p.z);
 
-    Vector e0 = *v2 - *v1;
-    Vector e1 = *v3 - *v2;
-    Vector e2 = *v1 - *v3;
+    // Vector cur1 = p_point - *v1;
+    // Vector cur2 = *v2 - *v1;
+    // Vector cur3 = *v3 - *v1;
+    Vector cur1 = p - vt_1;
+    Vector cur2 = vt_2 - vt_1;
+    Vector cur3 = vt_3 - vt_1;
 
-    Vector c0 = p_point - *v1;
-    Vector c1 = p_point - *v2;
-    Vector c2 = p_point - *v3;
-
-<<<<<<< HEAD
     // float r = (cur1.x * cur2.y - cur1.y * cur2.x) / (cur3.x * cur2.y - cur2.x * cur3.y);
     // float b = (cur1.x - r * cur3.x) / cur2.x;
     float b = (cur1.x*cur3.y - cur1.y*cur3.x) / (cur2.x*cur3.y - cur2.y*cur3.x);
     float r = (cur1.x*cur2.y - cur1.y*cur2.x) / (cur3.x*cur2.y - cur3.y*cur2.x);
-    // Vector c;
-    // c = c.cross((vt_2 - vt_1), (p - vt_1));
-    // if (n.dot(n, c) < 0)
-    //     return false;
-    // c = c.cross((vt_3 - vt_2), (p - vt_2));
-    // if (n.dot(n, c) < 0)
-    //     return false;
-    // c = c.cross((vt_1 - vt_3),(p - vt_3));
-    // if (n.dot(n, c) < 0)
-    //     return false;
 
     if ((b >= 0.0 && b <= 1.0) && (r >= 0.0 && r <= 1.0) && (r + b) <= 1.0)
     {
         local->pos = new Point(p.x, p.y, p.z);
         local->normal = new Normal(n.x, n.y, n.z);
-=======
-    Vector v01 = v31.cross(Vector(v2->x, v2->y, v2->z), Vector(v1->x, v1->y, v1->z));
-    Vector v02 = v31.cross(Vector(v3->x, v3->y, v3->z), Vector(v1->x, v1->y, v1->z));
 
-    Vector n_ = v31.cross(v01, v02);
->>>>>>> e89234d8dfbfe9ad7cf64b06f2770fcaa65985c6
-
-    if (v31.dot(n_, v31.cross(e0,c0)) < 0 ||
-        v31.dot(n_, v31.cross(e1,c1)) < 0 ||
-        v31.dot(n_, v31.cross(e2,c2)) < 0) {
-
-        return false;
+        return true;
     }
-<<<<<<< HEAD
 
     return false;
     // if (beta < 0 || beta > 1)
@@ -102,11 +81,6 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     // local->normal = new Normal(n.x, n.y, n.z);
     //
     // return true;
-=======
-    local->pos = new Point(p.x, p.y, p.z);
-    local->normal = new Normal(n.x, n.y, n.z);
-    return true;
->>>>>>> e89234d8dfbfe9ad7cf64b06f2770fcaa65985c6
 }
 
 // Same as intersect, but just return whether there is any intersection or
