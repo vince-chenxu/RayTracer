@@ -44,9 +44,9 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
 
     Vector p = pos_vec + dir * (*thit);
 
-    //Point p_point = Point(p.x, p.y, p.z);
+    Point p_point = Point(p.x, p.y, p.z);
 
-    Vector cur1 = p - *v1;
+    Vector cur1 = p_point - *v1;
     Vector cur2 = *v2 - *v1;
     Vector cur3 = *v3 - *v1;
 

@@ -32,7 +32,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Shape*> shape)
     // }
     bool intersected = false;
     // here we loop through all shapes
-    cout << "about to loop through all shapes\n";
+    //cout << "about to loop through all shapes\n";
     for (int i = 0; i < shape.size(); i ++)
     {
         // here check for the min distance
@@ -40,17 +40,22 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Shape*> shape)
         {
             // No intersection
             // Make the color black and return
-            cout << "shape #" << i + 1 << " intersected with ray" << endl;
+            //cout << "shape #" << i + 1 << " intersected with ray" << endl;
             *color = Color(0.5f, 0.5f, 0.5f);
             intersected = true;
         }
-        else
-            cout << "no intersection at shape #" << i + 1 << endl;
+        //else
+            //cout << "no intersection at shape #" << i + 1 << endl;
 
     }
     // no intersection
     if (!intersected)
+    {
         *color = Color(0.0f, 0.0f, 0.0f);
+        cout << "No intersection\n";
+    }
+    else
+        cout << "Yes intersection\n";
 
 
     // Obtain the brdf at intersection point

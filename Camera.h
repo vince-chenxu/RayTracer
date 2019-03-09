@@ -4,6 +4,8 @@
 #include "Sample.h"
 #include "Point.h"
 #include "Ray.h"
+#include <cfloat>
+const float pi = 3.1415;
 class Camera
 {
 public:

@@ -38,3 +38,12 @@ Ray::~Ray()
 {
     // automatically called
 }
+
+void Ray::print()
+{
+    cout << "pos: ";
+    pos.print();
+    cout << "dir: ";
+    dir.print();
+    cout << "t_min: " << t_min << " t_max " << t_max << endl;
+}

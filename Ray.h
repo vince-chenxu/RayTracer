@@ -16,6 +16,7 @@ public:
     Vector getDir();
     float getMax();
     float getMin();
+    void print();
     // destructor
     ~Ray();
 private:
