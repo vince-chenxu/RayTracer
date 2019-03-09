@@ -119,7 +119,7 @@ void Scene::loadFromFile(const char* filename)
                         film = new Film(width, height);
 
                         // here we pass a sample to fill the ray
-                        //camera = new Camera(*lookFrom, *lookAt, *up, fov, width, height);
+                        camera = new Camera(*lookFrom, *lookAt, *up, fov, width, height);
                         // here we get a ray back
 
                         // now we trace the ray with raytracer
@@ -517,9 +517,9 @@ void Scene::render()
         //cout << "Printing sampler\n";
         //sampler->print();
         camera->generateRay(sample, &ray);
-        raytracer.trace(ray, 0, &color, shape);
         cout << "Ray: \n";
         ray.print();
+        raytracer.trace(ray, 0, &color, shape);
         //color.print();
         film->commit(sample, color);
     }

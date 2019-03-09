@@ -47,9 +47,14 @@ void Camera::generateRay(Sample& sample, Ray* ray)
     //float fovx = 2 * atan(tan(fovy / 2.0) * width / height);
     // alpha = tan(fovx/2)*((j-(width/2))/(width/2))
     float alpha = tan(angle) * (width/float(height))*(sample.x-width/2.0)/(width/2.0);
+    //cout << "fovy: " << fovy << " width: " << width << " height: " << height << endl;
+    //cout << "sample: ";
+    //sample.print();
+    //cout << "alpha: " << alpha << endl;
     // cout << "alpha done\n";
     // float beta = tan(fovy/2)*((height/2-i)/(height/2))
     float beta = tan(angle) * (height/2.0-sample.y)/(height/2.0);
+    //cout << "beta: " << beta << endl;
     // ray = eye + (alpha*u + beta*v - w)/abs(alpha*u + beta*v - w)
     // Vector temp1 = u * alpha;
     // Vector temp2 = v * beta;
@@ -57,7 +62,10 @@ void Camera::generateRay(Sample& sample, Ray* ray)
     // Vector temp4 = temp3 - a;
     // temp4.normalize();
     Vector temp = u * alpha + v * beta - a;
+
     temp.normalize();
+    //cout << "direction: ";
+    //temp.print();
     //*ray = (lookAt - lookFrom) + temp4;
 
     *ray = Ray(lookFrom, temp, 1, 100);
