@@ -60,14 +60,25 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     // float b = (cur1.x - r * cur3.x) / cur2.x;
     float b = (cur1.x*cur3.y - cur1.y*cur3.x) / (cur2.x*cur3.y - cur2.y*cur3.x);
     float r = (cur1.x*cur2.y - cur1.y*cur2.x) / (cur3.x*cur2.y - cur3.y*cur2.x);
+    // Vector c;
+    // c = c.cross((vt_2 - vt_1), (p - vt_1));
+    // if (n.dot(n, c) < 0)
+    //     return false;
+    // c = c.cross((vt_3 - vt_2), (p - vt_2));
+    // if (n.dot(n, c) < 0)
+    //     return false;
+    // c = c.cross((vt_1 - vt_3),(p - vt_3));
+    // if (n.dot(n, c) < 0)
+    //     return false;
 
-    if (b >= 0.0 && b <= 1.0 && r >= 0.0 && r <= 1.0 && (r + b) <= 1.0) {
+    if ((b >= 0.0 && b <= 1.0) && (r >= 0.0 && r <= 1.0) && (r + b) <= 1.0)
+    {
         local->pos = new Point(p.x, p.y, p.z);
         local->normal = new Normal(n.x, n.y, n.z);
 
         return true;
     }
-    
+
     return false;
     // if (beta < 0 || beta > 1)
     //     return false;
