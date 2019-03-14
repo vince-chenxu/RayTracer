@@ -6,6 +6,7 @@
 #include "BRDF.h"
 #include "Shape.h"
 #include "LocalGeo.h"
+#include "AggregatePrimitive.h"
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -14,7 +15,7 @@ class RayTracer
 {
 public:
     RayTracer();
-    void trace(Ray& ray, int depth, Color* color, vector<Shape*> shape);
+    void trace(Ray& ray, int depth, Color* color, vector<Primitive*> primitives);
 
 private:
     // member variables

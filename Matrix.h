@@ -19,8 +19,8 @@ public:
     void rotate(float x, float y, float z, float degree);
     void translate(float x, float y, float z);
     void scale(float x, float y, float z);
-    void transpose();
-    void inverse();
+    Matrix transpose();
+    Matrix inverse();
     void print();
     //void transpose();
 //private:

@@ -15,6 +15,7 @@ class Transformation
 public:
     // default constructor
     Transformation();
+    Transformation(Matrix matrix);
     ~Transformation();
     // void rotate(float x, float y, float z, float degree);
     // void translate(float x, float y, float z);

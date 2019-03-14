@@ -10,13 +10,13 @@ public:
     // default contructor
     BRDF();
     // contructor
-    BRDF(Color kd_v, Color ks_v, Color ka_v, Color kr_v);
+    BRDF(Color kd_v, Color ks_v, Color ka_v);
     ~BRDF();
     // member variables
     // Storing information enough for shading
     // (it is not the actual BRDF function
     // in the rendering equation that will be covered later in the semester)
-    Color kd, ks, ka, kr;
+    Color kd, ks, ka;
 };
 
 

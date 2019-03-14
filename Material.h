@@ -12,7 +12,7 @@ class Material
 public:
     Material();
     Material(BRDF brdf);
-    BRDF getBRDF(LocalGeo& local, BRDF* brdf);
+    void getBRDF(LocalGeo& local, BRDF* brdf);
 private:
     BRDF constantBRDF;
 };

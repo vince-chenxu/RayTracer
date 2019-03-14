@@ -12,7 +12,7 @@ Material::Material(BRDF brdf)
     constantBRDF = brdf;
 }
 
-BRDF Material::getBRDF(LocalGeo& local, BRDF* brdf)
+void Material::getBRDF(LocalGeo& local, BRDF* brdf)
 {
-    return constantBRDF;
+    *brdf = constantBRDF;
 }

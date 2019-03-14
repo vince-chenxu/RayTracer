@@ -11,6 +11,12 @@ Transformation::Transformation()
     minvt.inverse();
     minvt.transpose();
 }
+
+Transformation::Transformation(Matrix matrix)
+{
+    m = matrix;
+    minvt = m.inverse().transpose();
+}
 Transformation::~Transformation()
 {
 

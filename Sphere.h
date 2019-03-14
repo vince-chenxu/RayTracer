@@ -2,6 +2,7 @@
 #define SPHERE_H
 #include "Shape.h"
 #include "Color.h"
+#include "Matrix.h"
 using namespace std;
 
 // parent class for triangle and sphere
@@ -27,6 +28,7 @@ public:
     Point* center;
     float radius;
     Color* color;
+    Matrix transform;
 };
 
 #endif // SPHERE_H

@@ -112,8 +112,14 @@ void Scene::loadFromFile(const char* filename)
                         //upinit = Transform::upvector(upinit,eyeDirection);
                         // up
                         up = new Vector(values[6], values[7], values[8]);
+                        up->normalize();
+                        // Vector temp1 = *lookFrom - *lookAt;
+                        // *up = up->cross(*up, temp1);
+                        // Vector temp2 = up->cross(*up, temp1);
+                        // *up = up->cross(temp2, temp1) * -1;
+                        // up->normalize();
                         cout << "printing Vector up\n";
-                        up->print();
+                        // up->print();
                         // Set fovy value
                         fov = values[9];
                         cout << "printing fov value\n";
@@ -152,9 +158,9 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        ka = new Color(values[0],values[1],values[2]);
+                        ka = Color(values[0],values[1],values[2]);
                         cout << "ambient: ";
-                        ka->print();
+                        ka.print();
                         // cout << "about to seg fault\n";
                         // if (shape.size() > 0)
                         // shape[shape.size()]->color = new Color(values[0],values[1],values[2]);
@@ -169,9 +175,9 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        kd = new Color(values[0],values[1],values[2]);
+                        kd = Color(values[0],values[1],values[2]);
                         cout << "diffuse: ";
-                        kd->print();
+                        kd.print();
                     }
                 }
                 // specular command
@@ -181,9 +187,9 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         // values[0] = R, values[1] = G, values[2] = B
-                        ks = new Color(values[0],values[1],values[2]);
+                        ks = Color(values[0],values[1],values[2]);
                         cout << "specular: ";
-                        ks->print();
+                        ks.print();
                     }
                 }
                 else if (cmd == "maxverts")
@@ -229,9 +235,31 @@ void Scene::loadFromFile(const char* filename)
                         // triVec.push(values[1]); // coord 2
                         // triVec.push(values[2]); // coord 3
                         tri.push_back(Tri(values[0], values[1], values[2]));
-                        shape.push_back(new Triangle(vertex[int(values[0])].x, vertex[int(values[0])].y, vertex[int(values[0])].z,
+                        // shape.push_back(new Triangle(vertex[int(values[0])].x, vertex[int(values[0])].y, vertex[int(values[0])].z,
+                                                 // vertex[int(values[1])].x, vertex[int(values[1])].y, vertex[int(values[1])].z,
+                                                 // vertex[int(values[2])].x, vertex[int(values[2])].y, vertex[int(values[2])].z, *ka));
+                        Triangle* t = new Triangle(vertex[int(values[0])].x, vertex[int(values[0])].y, vertex[int(values[0])].z,
                                                  vertex[int(values[1])].x, vertex[int(values[1])].y, vertex[int(values[1])].z,
-                                                 vertex[int(values[2])].x, vertex[int(values[2])].y, vertex[int(values[2])].z, *ka));
+                                                 vertex[int(values[2])].x, vertex[int(values[2])].y, vertex[int(values[2])].z, ka);
+                        Shape* s = t;
+                        // BRDF constructor needs kr and ke, modify later, use ka as kr placeholder
+                        // cout << "b4 brdf\n";
+                        BRDF brdf = BRDF(kd, ks, ka);
+                        // cout << "after brdf\n";
+                        // cout << "Color b4 going into material\n";
+                        ka.print();
+                        Material* m = new Material(brdf);
+                        // cout << "Color after material\n";
+                        // m->getBRDF().ka.print();
+                        if (transfstack.size() > 0)
+                        {
+                            // transfstack not empty
+                            (*t).transform = transfstack.top();
+                        }
+                        Transformation* objW = new Transformation(transfstack.top());
+                        Transformation* wObj = new Transformation(transfstack.top().inverse());
+                        GeometricPrimitive* gp = new GeometricPrimitive(*objW, *wObj, s, m);
+                        primitives.push_back(gp);
                     }
                     //triNum ++;
                 }
@@ -244,7 +272,20 @@ void Scene::loadFromFile(const char* filename)
                         // triVec.push(values[1]); // coord 2
                         // triVec.push(values[2]); // coord 3
                         sph.push_back(Sph(values[0], values[1], values[2], values[3]));
-                        shape.push_back(new Sphere(values[0], values[1], values[2], values[3], *ka));
+                        // shape.push_back(new Sphere(values[0], values[1], values[2], values[3], *ka));
+                        Sphere* sphere = new Sphere(values[0], values[1], values[2], values[3], ka);
+                        Shape* s = sphere;
+                        BRDF brdf = BRDF(kd, ks, ka);
+                        Material* m = new Material(brdf);
+                        if (transfstack.size() > 0)
+                        {
+                            // transfstack not empty
+                            (*sphere).transform = transfstack.top();
+                        }
+                        Transformation* objW = new Transformation(transfstack.top());
+                        Transformation* wObj = new Transformation(transfstack.top().inverse());
+                        GeometricPrimitive* gp = new GeometricPrimitive(*objW, *wObj, s, m);
+                        primitives.push_back(gp);
                     }
                     //triNum ++;
                 }
@@ -268,8 +309,13 @@ void Scene::loadFromFile(const char* filename)
                     validinput = readvals(s,3,values);
                     if (validinput)
                     {
-                        Matrix m = Matrix();;
+                        Matrix m = Matrix();
+                        cout << "b4 scaling\n";
+                        m.print();
+                        cout << "Scaling:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
                         m.scale(values[0], values[1], values[2]);
+                        cout << "after scaling\n";
+                        m.print();
                         rightmultiply(m.mat, transfstack);
                     }
                 }
@@ -279,7 +325,12 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         Matrix m = Matrix();
+                        cout << "b4 translating\n";
+                        m.print();
+                        cout << "Translating:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
                         m.translate(values[0], values[1], values[2]);
+                        cout << "after translating\n";
+                        m.print();
                         rightmultiply(m.mat, transfstack);
                     }
                 }
@@ -289,7 +340,12 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         Matrix m = Matrix();
+                        cout << "b4 rotating\n";
+                        m.print();
+                        cout << "Rotating:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
                         m.rotate(values[0], values[1], values[2], values[3]);
+                        cout << "after rotating\n";
+                        m.print();
                         rightmultiply(m.mat, transfstack);
                     }
                 }
@@ -583,10 +639,10 @@ void Scene::render()
         camera->generateRay(sample, &ray);
         //cout << "Ray: \n";
         //ray.print();
-        raytracer.trace(ray, 0, &color, shape);
-        //color.print();
+        raytracer.trace(ray, 0, &color, primitives);
+        // color.print();
         film->commit(sample, color);
     }
     film->writeImage();
-    cout << "There are total of " << shape.size() << " objects\n";
+    cout << "There are total of " << primitives.size() << " objects\n";
 }

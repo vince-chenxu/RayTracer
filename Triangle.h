@@ -1,6 +1,7 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 #include "Shape.h"
+#include "Matrix.h"
 using namespace std;
 
 // parent class for triangle and sphere
@@ -27,6 +28,7 @@ public:
     Point* v2;
     Point* v3;
     Color* color;
+    Matrix transform;
 };
 
 #endif // TRIANGLE_H

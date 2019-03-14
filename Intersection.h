@@ -12,8 +12,8 @@ public:
     // default constructor
     Intersection();
     // constructor
-    // Intersection(LocalGeo geo, Primitive* prim);
-    Intersection(LocalGeo geo, Shape* s);
+    Intersection(LocalGeo geo, Primitive* prim);
+    // Intersection(LocalGeo geo, Shape* s);
     // destructor
     ~Intersection();
 
@@ -21,7 +21,7 @@ public:
     // member varaible
     LocalGeo localGeo;
     Primitive* primitive;
-    Shape* shape;
+    // Shape* shape;
 };
 
 #endif // INTERSECTION_H

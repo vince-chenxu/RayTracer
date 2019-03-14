@@ -7,7 +7,7 @@ RayTracer::RayTracer()
 {
     threshold = 20;
 }
-void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Shape*> shape)
+void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> primitives)
 {
     // hardcode threshold
 
@@ -15,14 +15,33 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Shape*> shape)
     {
         // depth exceeds the threshold
         // Make the color black and return
-        *color = Color(0.0f, 0.0f, 0.0f);
+        // *color = Color(0.0f, 0.0f, 0.0f);
         cout << "depth > threshold returning now\n";
         return;
     }
-    LocalGeo in;
+    LocalGeo local;
+    Intersection in;
     BRDF brdf;
-    float thit;
-    //if (!primitive.intersect(ray, &thit, &in)
+    float thit = 0.0f;
+    Primitive* primitive = new AggregatePrimitive(primitives);
+    if (!primitive->intersect(ray, &thit, &in))
+    {
+        // No intersection
+        // Make the color black and return
+        *color = Color(0.0f, 0.0f, 0.0f);
+        // cout << "no intersection\n";
+        return;
+    }
+    // there is intersection
+    // get color
+    // cout << "yes intersection\n";
+    in.primitive->getBRDF(in.localGeo, &brdf);
+    color->r = brdf.ka.r;
+    color->g = brdf.ka.g;
+    color->b = brdf.ka.b;
+    // color->print();
+    // *color = Color(brdf.ka.r, brdf.ka.g, brdf.ka.b);
+
     // if (!shape.intersect(ray, &thit, &in))
     // {
     //     // No intersection
@@ -30,43 +49,43 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Shape*> shape)
     //     *color = Color(0.0f, 0.0f, 0.0f);
     //     return;
     // }
-    bool intersected = false;
-    // here we loop through all shapes
-    //cout << "about to loop through all shapes\n";
-    float min = 99999999;
-    int shape_index = 0;
-    for (int i = 0; i < shape.size(); i ++)
-    {
-        // here check for the min distance
-        if (shape[i]->intersect(ray, &thit, &in))
-        {
-
-            // No intersection
-            // Make the color black and return
-            //cout << "shape #" << i + 1 << " intersected with ray" << endl;
-            if (min > thit)
-            {
-                min = thit;
-                shape_index = i;
-            }
-            //*color = Color(0.5f, 0.5f, 0.5f);
-            intersected = true;
-        }
-        //else
-            //cout << "no intersection at shape #" << i + 1 << endl;
-
-    }
-    // no intersection
-    if (!intersected)
-    {
-        *color = Color(0.0f, 0.0f, 0.0f);
-        //cout << "No intersection\n";
-    }
-    else
-    {
-        //cout << "Yes intersection\n";
-        *color = Color(shape[shape_index]->getColor().r, shape[shape_index]->getColor().g, shape[shape_index]->getColor().b);
-    }
+    // bool intersected = false;
+    // // here we loop through all shapes
+    // //cout << "about to loop through all shapes\n";
+    // float min = 99999999;
+    // int shape_index = 0;
+    // for (int i = 0; i < shape.size(); i ++)
+    // {
+    //     // here check for the min distance
+    //     if (shape[i]->intersect(ray, &thit, &in))
+    //     {
+    //
+    //         // No intersection
+    //         // Make the color black and return
+    //         //cout << "shape #" << i + 1 << " intersected with ray" << endl;
+    //         if (min > thit)
+    //         {
+    //             min = thit;
+    //             shape_index = i;
+    //         }
+    //         //*color = Color(0.5f, 0.5f, 0.5f);
+    //         intersected = true;
+    //     }
+    //     //else
+    //         //cout << "no intersection at shape #" << i + 1 << endl;
+    //
+    // }
+    // // no intersection
+    // if (!intersected)
+    // {
+    //     *color = Color(0.0f, 0.0f, 0.0f);
+    //     //cout << "No intersection\n";
+    // }
+    // else
+    // {
+    //     //cout << "Yes intersection\n";
+    //     *color = Color(shape[shape_index]->getColor().r, shape[shape_index]->getColor().g, shape[shape_index]->getColor().b);
+    // }
 
 
     // Obtain the brdf at intersection point

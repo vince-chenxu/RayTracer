@@ -75,9 +75,9 @@ void Matrix::rotate(float x, float y, float z, float degree)
 }
 void Matrix::translate(float x, float y, float z)
 {
-    mat[3][0] = mat[3][0] * x;
-    mat[3][1] = mat[3][1] * y;
-    mat[3][2] = mat[3][2] * z;
+    mat[3][0] = x;
+    mat[3][1] = y;
+    mat[3][2] = z;
 }
 void Matrix::scale(float x, float y, float z)
 {
@@ -85,17 +85,19 @@ void Matrix::scale(float x, float y, float z)
     mat[1][1] = mat[1][1] * y;
     mat[2][2] = mat[2][2] * z;
 }
-void Matrix::inverse()
+Matrix Matrix::inverse()
 {
     mat = glm::inverse(mat);
+    return *this;
 }
-void Matrix::transpose()
+Matrix Matrix::transpose()
 {
     mat = glm::transpose(mat);
+    return *this;
 }
 void Matrix::print()
 {
-    cout << "Printing 4x4 matrix:\n:";
+    cout << "Printing 4x4 matrix:\n";
     cout << mat[0][0] << " " << mat[1][0] << " " << mat[2][0] << " " << mat[3][0] << endl
          << mat[0][1] << " " << mat[1][1] << " " << mat[2][1] << " " << mat[3][1] << endl
          << mat[0][2] << " " << mat[1][2] << " " << mat[2][2] << " " << mat[3][2] << endl

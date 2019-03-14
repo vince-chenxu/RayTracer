@@ -13,6 +13,10 @@
 #include "RayTracer.h"
 #include "Matrix.h"
 #include "Primitive.h"
+#include "Material.h"
+#include "GeometricPrimitive.h"
+#include "Transformation.h"
+// #include "BRDF.h"
 // #include "Color.h"
 // #include "Ray.h"
 // #include "Film.h"
@@ -55,10 +59,10 @@ private:
     Vector* up;
     // fov
     float fov;
-    // pointers to Color objects: ka, kd, ks
-    Color* ka;
-    Color* kd;
-    Color* ks;
+    // Color objects: ka, kd, ks
+    Color ka, kd, ks;
+    // Color* kd;
+    // Color* ks;
     // film object pointer
     Film* film;
     // Sampler object pointer
@@ -77,5 +81,5 @@ private:
     vector<Shape*> shape;
     RayTracer raytracer;
     // vector that holds all primitives
-    //vector<Primitive*> primitives;
+    vector<Primitive*> primitives;
 };
