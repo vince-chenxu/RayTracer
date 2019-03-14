@@ -1,8 +1,11 @@
 #ifndef MATRIX_H
 #define MATRIX_H
+#include "Vector.h"
+#include <iostream>
+#include <cmath>
 
 using namespace std;
-
+const float PI = 3.1415926;
 class Matrix
 {
 public:
@@ -16,10 +19,14 @@ public:
     void rotate(float x, float y, float z, float degree);
     void translate(float x, float y, float z);
     void scale(float x, float y, float z);
+    void transpose();
+    void inverse();
+    void print();
     //void transpose();
-private:
+//private:
     // 4x4 matrix
-    glm::mat4 m = glm::mat4(1.0f);
+    // float mat[4][4];
+    glm::mat4 mat;
 };
 
 

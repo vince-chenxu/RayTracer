@@ -8,6 +8,15 @@ Ray::Ray()
 {
     // empty for now
 }
+
+Ray::Ray(Point position, Vector direction)
+{
+    pos = position;
+    dir = direction;
+    dir.normalize();
+    t_min = 1;
+    t_max = 100;
+}
 // constructor with Point position, Vector direction, min and max
 Ray::Ray(Point position, Vector direction, float min, float max)
 {

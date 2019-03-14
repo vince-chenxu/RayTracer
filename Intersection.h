@@ -2,6 +2,7 @@
 #define INTERSECTION_H
 #include "Shape.h"
 #include "LocalGeo.h"
+#include "Primitive.h"
 #include <iostream>
 using namespace std;
 
@@ -19,7 +20,7 @@ public:
 //private:
     // member varaible
     LocalGeo localGeo;
-    // Primitive* primitive
+    Primitive* primitive;
     Shape* shape;
 };
 

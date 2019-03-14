@@ -11,6 +11,8 @@
 #include "Triangle.h"
 #include "Shape.h"
 #include "RayTracer.h"
+#include "Matrix.h"
+#include "Primitive.h"
 // #include "Color.h"
 // #include "Ray.h"
 // #include "Film.h"
@@ -22,6 +24,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <stack>
 using namespace std;
 
 class Scene
@@ -37,6 +40,10 @@ public:
     void loadFromFile(const char* fileName);
     // function for the main rendering loop
     void render();
+    // helper functions from hw2
+    // void matransform(stack<glm::mat4> &transfstack, float* values);
+    void rightmultiply(const glm::mat4 & M, stack<Matrix> &transfstack);
+
 // private member variables
 private:
     // // width and height of the window/scene
@@ -69,4 +76,6 @@ private:
     // vector that holds all shapes
     vector<Shape*> shape;
     RayTracer raytracer;
+    // vector that holds all primitives
+    //vector<Primitive*> primitives;
 };

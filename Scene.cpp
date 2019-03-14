@@ -15,6 +15,21 @@ Scene::Scene(const char* filename)
     render();
 }
 
+// The function below applies the appropriate transform to a 4-vector
+// void Scene::matransform(stack<glm::mat4> &transfstack, float* values)
+// {
+//   mat4 transform = transfstack.top();
+//   vec4 valvec = vec4(values[0],values[1],values[2],values[3]);
+//   vec4 newval = transform * valvec;
+//   for (int i = 0; i < 4; i++) values[i] = newval[i];
+// }
+
+void Scene::rightmultiply(const glm::mat4 & M, stack<Matrix> &transfstack)
+{
+  Matrix &T = transfstack.top();
+  T.mat = T.mat * M;
+}
+
 // help function much like the one from HW2
 bool Scene::readvals (stringstream &s, const int numvals, float values[])
 {
@@ -38,7 +53,8 @@ void Scene::loadFromFile(const char* filename)
     in.open(filename);
     if (in.is_open())
     {
-
+        stack <Matrix> transfstack;
+        transfstack.push(Matrix());  // identity
         getline (in, str);
         while (in)
         {
@@ -232,7 +248,51 @@ void Scene::loadFromFile(const char* filename)
                     }
                     //triNum ++;
                 }
-
+                else if (cmd == "pushTransform")
+                {
+                  transfstack.push(transfstack.top());
+                }
+                else if (cmd == "popTransform")
+                {
+                  if (transfstack.size() <= 1)
+                  {
+                    cerr << "Stack has no elements.  Cannot Pop\n";
+                  }
+                  else
+                  {
+                    transfstack.pop();
+                  }
+                }
+                else if (cmd == "scale")
+                {
+                    validinput = readvals(s,3,values);
+                    if (validinput)
+                    {
+                        Matrix m = Matrix();;
+                        m.scale(values[0], values[1], values[2]);
+                        rightmultiply(m.mat, transfstack);
+                    }
+                }
+                else if (cmd == "translate")
+                {
+                    validinput = readvals(s,3,values);
+                    if (validinput)
+                    {
+                        Matrix m = Matrix();
+                        m.translate(values[0], values[1], values[2]);
+                        rightmultiply(m.mat, transfstack);
+                    }
+                }
+                else if (cmd == "rotate")
+                {
+                    validinput = readvals(s,4,values);
+                    if (validinput)
+                    {
+                        Matrix m = Matrix();
+                        m.rotate(values[0], values[1], values[2], values[3]);
+                        rightmultiply(m.mat, transfstack);
+                    }
+                }
                 // Material Commands
                 // Ambient, diffuse, specular, shininess properties for each object.
                 // Filling this in is pretty straightforward, so I've left it in

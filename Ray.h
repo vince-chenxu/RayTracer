@@ -9,6 +9,7 @@ public:
     // It represent the ray ray(t) = pos + t*dir, where t_min <= t <= t_max
     // default construc
     Ray();
+    Ray(Point position, Vector direction);
     // constructor with Point position, Vector direction, min and max
     Ray(Point position, Vector direction, float min, float max);
 
@@ -19,7 +20,7 @@ public:
     void print();
     // destructor
     ~Ray();
-private:
+// private:
     Point pos;
     Vector dir;
     float t_min;

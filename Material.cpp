@@ -3,7 +3,16 @@
 
 using namespace std;
 
-void Material::getBRDF(LocalGeo& local, BRDF* brdf)
+Material::Material()
+{
+
+}
+Material::Material(BRDF brdf)
+{
+    constantBRDF = brdf;
+}
+
+BRDF Material::getBRDF(LocalGeo& local, BRDF* brdf)
 {
     return constantBRDF;
 }
