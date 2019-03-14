@@ -15,8 +15,8 @@ endif
 
 RM = /bin/rm -f
 all: RayTracer
-RayTracer: main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Triangle.o Sphere.o Normal.o LocalGeo.o Shape.o Intersection.o BRDF.o RayTracer.o Matrix.o Transformation.o Primitive.o GeometricPrimitive.o Material.o Scene.h Point.h Vector.h Sample.h Sampler.h Color.h Ray.h Film.h Camera.h Vertex.h Tri.h Sph.h Triangle.h Sphere.h Normal.h LocalGeo.h Shape.h Intersection.h BRDF.h RayTracer.h Matrix.h Transformation.h Primitive.h GeometricPrimitive.h Material.h
-	$(CC) $(CFLAGS) -o RayTracer main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Triangle.o Sphere.o Normal.o LocalGeo.o Shape.o Intersection.o BRDF.o RayTracer.o Matrix.o Transformation.o Primitive.o GeometricPrimitive.o Material.o $(INCFLAGS) $(LDFLAGS)
+RayTracer: main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Triangle.o Sphere.o Normal.o LocalGeo.o Shape.o Intersection.o BRDF.o RayTracer.o Matrix.o Transformation.o Primitive.o GeometricPrimitive.o Material.o AggregatePrimitive.o Scene.h Point.h Vector.h Sample.h Sampler.h Color.h Ray.h Film.h Camera.h Vertex.h Tri.h Sph.h Triangle.h Sphere.h Normal.h LocalGeo.h Shape.h Intersection.h BRDF.h RayTracer.h Matrix.h Transformation.h Primitive.h GeometricPrimitive.h Material.h AggregatePrimitive.h
+	$(CC) $(CFLAGS) -o RayTracer main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Triangle.o Sphere.o Normal.o LocalGeo.o Shape.o Intersection.o BRDF.o RayTracer.o Matrix.o Transformation.o Primitive.o GeometricPrimitive.o Material.o AggregatePrimitive.o $(INCFLAGS) $(LDFLAGS)
 main.o: main.cpp Scene.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c main.cpp
 Scene.o: Scene.cpp Scene.h
@@ -69,6 +69,8 @@ GeometricPrimitive.o: GeometricPrimitive.cpp GeometricPrimitive.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c GeometricPrimitive.cpp
 Material.o: Material.cpp Material.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Material.cpp
+AggregatePrimitive.o: AggregatePrimitive.cpp AggregatePrimitive.h
+	$(CC) $(CFLAGS) $(INCFLAGS) -c AggregatePrimitive.cpp
 
 clean:
 	$(RM) *.o RayTracer *.png

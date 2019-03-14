@@ -1,5 +1,7 @@
 #ifndef AggregatePrimitive_H
 #define AggregatePrimitive_H
+#include "Primitive.h"
+#include "Intersection.h"
 using namespace std;
 
 class AggregatePrimitive : public Primitive
@@ -14,16 +16,17 @@ public:
     AggregatePrimitive();
     AggregatePrimitive(vector<Primitive*> list);
     ~AggregatePrimitive();
-    bool intersect(Ray& ray, float* thit, Intersection* in)
-    bool intersectP(Ray& ray)
+    bool intersect(Ray& ray, float* thit, Intersection* in);
+    bool intersectP(Ray& ray);
     void getBRDF(LocalGeo& local, BRDF* brdf)
     {
         exit(1);
         // This should never get called, because in->primitive will
         // never be an aggregate primitive
     }
-private:
-
+    float getDist(const Point& p, const Point& r);
+// private:
+    vector<Primitive*> primitives;
 };
 
 
