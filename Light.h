@@ -1,3 +1,10 @@
+#ifndef LIGHT_H
+#define LIGHT_H
+
+#include "Ray.h"
+#include "LocalGeo.h"
+#include "Color.h"
+
 using namespace std;
 
 class Light
@@ -10,5 +17,7 @@ class Light
     // and the ray points to the light direction, however, t_max is infinity.
 
 public:
-    void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);   
+    void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);
 };
+
+#endif

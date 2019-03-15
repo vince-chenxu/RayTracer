@@ -82,4 +82,17 @@ private:
     RayTracer raytracer;
     // vector that holds all primitives
     vector<Primitive*> primitives;
+
+    // Directional light's direction and color
+    Vector* dir_light_pos;
+    Color* dir_light_color;
+
+    // Point light's position and color
+    Point* point_light_pos;
+    Color* point_light_color;
+
+    // Light attenuation factors
+    float attenu_const;
+    float attenu_linear;
+    float attenu_quadra;
 };
