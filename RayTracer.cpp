@@ -5,12 +5,12 @@ using namespace std;
 
 RayTracer::RayTracer()
 {
-    threshold = 20;
+
 }
 
-void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> primitives, vector<Light> lights, float c0, float c1, float c2)
+void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<Primitive*> primitives, vector<Light> lights, float c0, float c1, float c2)
 {
-    if (depth > threshold)
+    if (depth > max_depth)
     {
         // depth exceeds the threshold
         // Make the color black and return
@@ -34,9 +34,9 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> prim
     // there is intersection
     // get color
     in.primitive->getBRDF(in.localGeo, &brdf);
-    color->r = brdf.ka.r;
-    color->g = brdf.ka.g;
-    color->b = brdf.ka.b;
+    // color->r = brdf.ka.r;
+    // color->g = brdf.ka.g;
+    // color->b = brdf.ka.b;
     // color->print();
     // *color = Color(brdf.ka.r, brdf.ka.g, brdf.ka.b);
 
@@ -57,7 +57,6 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> prim
 
         // If not, do lighting calculation for this
         // light source
-
         if (!primitive->intersect(ray, &thit, &in)) {
             *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
         }
@@ -67,16 +66,15 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> prim
     }
 
     // Handle mirror reflection
-    if (brdf.kr > 0) { //?????????????????/
-        Ray reflectRay = createReflectRay(in.localGeo, ray);
-        Color tempColor;
-        // Make a recursive call to trace the reflected ray
-        trace(reflectRay, depth+1, &tempColor, primitives, lights, c0, c1, c2);
-        *color = *color + tempColor * brdf.kr;
-    } else {
-        // Finally add the ambient and emissive color to the object
-        *color = *color + brdf.ka + brdf.ke;
-    }
+    Ray reflectRay = createReflectRay(in.localGeo, ray);
+    Color tempColor;
+    // Make a recursive call to trace the reflected ray
+    trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
+    *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
+
+
+    // Finally add the ambient and emissive color to the object
+    *color = *color + brdf.ka + brdf.ke;
 }
 
 Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor, float c0, float c1, float c2) {

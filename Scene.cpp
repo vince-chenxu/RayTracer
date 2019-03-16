@@ -10,6 +10,9 @@ Scene::Scene()
 
 Scene::Scene(const char* filename)
 {
+    // set default values
+    maxdepth = 5;
+    ka = Color(0.2, 0.2, 0.2);
     // pass the filename and begin command parsing process
     loadFromFile(filename);
     render();
@@ -81,6 +84,15 @@ void Scene::loadFromFile(const char* filename)
 
                         //width = (int) values[0]; height = (int) values[1];
                         width = values[0]; height = values[1];
+                    }
+                }
+
+                if (cmd == "maxdepth")
+                {
+                    validinput = readvals(s,1,values);
+                    if (validinput)
+                    {
+                        maxdepth = values[0];
                     }
                 }
 
@@ -268,7 +280,7 @@ void Scene::loadFromFile(const char* filename)
                                                  vertex[int(values[1])].x, vertex[int(values[1])].y, vertex[int(values[1])].z,
                                                  vertex[int(values[2])].x, vertex[int(values[2])].y, vertex[int(values[2])].z, ka);
                         Shape* s = t;
-                        BRDF brdf = BRDF(kd, ks, ka, ksh, ke, kr);
+                        BRDF brdf = BRDF(kd, ks, ka, ksh, ke);
 
                         ka.print();
                         Material* m = new Material(brdf);
@@ -294,7 +306,7 @@ void Scene::loadFromFile(const char* filename)
                         sph.push_back(Sph(values[0], values[1], values[2], values[3]));
                         Sphere* sphere = new Sphere(values[0], values[1], values[2], values[3], ka);
                         Shape* s = sphere;
-                        BRDF brdf = BRDF(kd, ks, ka, ksh, ke, kr);
+                        BRDF brdf = BRDF(kd, ks, ka, ksh, ke);
                         Material* m = new Material(brdf);
                         if (transfstack.size() > 0)
                         {
@@ -401,7 +413,7 @@ void Scene::render()
     while (sampler->getSample(&sample))
     {
         camera->generateRay(sample, &ray);
-        raytracer.trace(ray, 0, &color, primitives, lights, attenu_const, attenu_linear, attenu_quadra);
+        raytracer.trace(ray, 0, maxdepth, &color, primitives, lights, attenu_const, attenu_linear, attenu_quadra);
         film->commit(sample, color);
     }
     film->writeImage();

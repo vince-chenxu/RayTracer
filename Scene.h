@@ -53,7 +53,7 @@ public:
 // private member variables
 private:
     // // width and height of the window/scene
-    int width, height, maxverts;
+    int width, height, maxverts, maxdepth;
     // pointers to Point objects: lookFrom, lookAt
     Point* lookFrom;
     Point* lookAt;
@@ -62,8 +62,7 @@ private:
     // fov
     float fov;
     // Color objects: ka, kd, ks, ke
-    Color kd, ks, ke;
-    Color ka = Color(0.2, 0.2, 0.2);
+    Color kd, ks, ke, ka;
     float ksh, kr;
     // Color* kd;
     // Color* ks;
