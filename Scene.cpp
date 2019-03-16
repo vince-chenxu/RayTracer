@@ -185,13 +185,13 @@ void Scene::loadFromFile(const char* filename)
                         DirectionalLight dl = DirectionalLight(values[0], values[1], values[2], values[3], values[4], values[5]);
                         lights.push_back(dl);
 
-                        dir_light_pos = new Vector(values[0],values[1],values[2]);
+                        Vector dir_light_pos = Vector(values[0],values[1],values[2]);
                         cout << "directional light direction: ";
-                        dir_light_pos->print();
+                        dir_light_pos.print();
 
-                        dir_light_color = new Color(values[3],values[4],values[5]);
+                        Color dir_light_color = Color(values[3],values[4],values[5]);
                         cout << "directional light color: ";
-                        dir_light_color->print();
+                        dir_light_color.print();
 
                     }
                 }
@@ -206,11 +206,11 @@ void Scene::loadFromFile(const char* filename)
 
                         Point point_light_pos = Point(values[0],values[1],values[2]);
                         cout << "point light direction: ";
-                        point_light_pos->print();
+                        point_light_pos.print();
 
                         Color point_light_color = Color(values[3],values[4],values[5]);
                         cout << "point light color: ";
-                        point_light_color->print();
+                        point_light_color.print();
                     }
                 }
 
@@ -268,7 +268,7 @@ void Scene::loadFromFile(const char* filename)
                                                  vertex[int(values[1])].x, vertex[int(values[1])].y, vertex[int(values[1])].z,
                                                  vertex[int(values[2])].x, vertex[int(values[2])].y, vertex[int(values[2])].z, ka);
                         Shape* s = t;
-                        BRDF brdf = BRDF(kd, ks, ka);
+                        BRDF brdf = BRDF(kd, ks, ka, ksh, ke, kr);
 
                         ka.print();
                         Material* m = new Material(brdf);
@@ -294,7 +294,7 @@ void Scene::loadFromFile(const char* filename)
                         sph.push_back(Sph(values[0], values[1], values[2], values[3]));
                         Sphere* sphere = new Sphere(values[0], values[1], values[2], values[3], ka);
                         Shape* s = sphere;
-                        BRDF brdf = BRDF(kd, ks, ka);
+                        BRDF brdf = BRDF(kd, ks, ka, ksh, ke, kr);
                         Material* m = new Material(brdf);
                         if (transfstack.size() > 0)
                         {
@@ -443,7 +443,7 @@ void Scene::render()
     while (sampler->getSample(&sample))
     {
         camera->generateRay(sample, &ray);
-        raytracer.trace(ray, 0, &color, primitives);
+        raytracer.trace(ray, 0, &color, primitives, lights, attenu_const, attenu_linear, attenu_quadra);
         film->commit(sample, color);
     }
     film->writeImage();

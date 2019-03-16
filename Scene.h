@@ -62,8 +62,9 @@ private:
     // fov
     float fov;
     // Color objects: ka, kd, ks, ke
-    Color ka, kd, ks, ke;
-    float ksh;
+    Color kd, ks, ke;
+    Color ka = Color(0.2, 0.2, 0.2);
+    float ksh, kr;
     // Color* kd;
     // Color* ks;
     // film object pointer
