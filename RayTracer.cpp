@@ -7,7 +7,8 @@ RayTracer::RayTracer()
 {
     threshold = 20;
 }
-void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> primitives)
+
+void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> primitives, vector<Light> lights)
 {
     // hardcode threshold
 
@@ -15,26 +16,24 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> prim
     {
         // depth exceeds the threshold
         // Make the color black and return
-        // *color = Color(0.0f, 0.0f, 0.0f);
         cout << "depth > threshold returning now\n";
         return;
     }
     LocalGeo local;
-    Intersection in;
+    // Intersection in;
+    // float thit = 0.0f;
     BRDF brdf;
-    float thit = 0.0f;
     Primitive* primitive = new AggregatePrimitive(primitives);
-    if (!primitive->intersect(ray, &thit, &in))
+    // if (!primitive->intersect(ray, &thit, &in))
+    if (!primitive->intersectP(ray))
     {
         // No intersection
         // Make the color black and return
         *color = Color(0.0f, 0.0f, 0.0f);
-        // cout << "no intersection\n";
         return;
     }
     // there is intersection
     // get color
-    // cout << "yes intersection\n";
     in.primitive->getBRDF(in.localGeo, &brdf);
     color->r = brdf.ka.r;
     color->g = brdf.ka.g;
@@ -42,59 +41,76 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> prim
     // color->print();
     // *color = Color(brdf.ka.r, brdf.ka.g, brdf.ka.b);
 
-    // if (!shape.intersect(ray, &thit, &in))
-    // {
-    //     // No intersection
-    //     // Make the color black and return
-    //     *color = Color(0.0f, 0.0f, 0.0f);
-    //     return;
-    // }
-    // bool intersected = false;
-    // // here we loop through all shapes
-    // //cout << "about to loop through all shapes\n";
-    // float min = 99999999;
-    // int shape_index = 0;
-    // for (int i = 0; i < shape.size(); i ++)
-    // {
-    //     // here check for the min distance
-    //     if (shape[i]->intersect(ray, &thit, &in))
-    //     {
-    //
-    //         // No intersection
-    //         // Make the color black and return
-    //         //cout << "shape #" << i + 1 << " intersected with ray" << endl;
-    //         if (min > thit)
-    //         {
-    //             min = thit;
-    //             shape_index = i;
-    //         }
-    //         //*color = Color(0.5f, 0.5f, 0.5f);
-    //         intersected = true;
-    //     }
-    //     //else
-    //         //cout << "no intersection at shape #" << i + 1 << endl;
-    //
-    // }
-    // // no intersection
-    // if (!intersected)
-    // {
-    //     *color = Color(0.0f, 0.0f, 0.0f);
-    //     //cout << "No intersection\n";
-    // }
-    // else
-    // {
-    //     //cout << "Yes intersection\n";
-    //     *color = Color(shape[shape_index]->getColor().r, shape[shape_index]->getColor().g, shape[shape_index]->getColor().b);
-    // }
+    // There is an intersection, loop through all light source
+    for (i = 0; i < lights.size(); i++)
+    {
+        Ray* lray;
+        Color* lcolor;
+        lights[i].generateLightRay(in.localGeo, &lray, &lcolor);
 
+        // Check if the light is blocked or not
 
-    // Obtain the brdf at intersection point
-    // in.primitive->getBRDF(in.local, &brdf);
-    //in.shape->getBRDF(in.local, &brdf);
-    // IMPORTANT: how to access BRDF and emission?
+        // If not, do lighting calculation for this
+        // light source
+        if (!primitive->intersectP(lray)) {
+            *color += lighting(ray, in.localGeo, brdf, lray, lcolor);
+        }
+        else {
+            *color += shading(ray, in.localGeo, brdf, lray, lcolor);
+        }
+    }
 
-    // Then color it to be ambient + emission
+    // Handle mirror reflection
+    if (brdf.kr > 0) {
+        Ray reflectRay = createReflectRay(in.localGeo, ray);
+        Color tempColor;
+        // Make a recursive call to trace the reflected ray
+        trace(reflectRay, depth+1, &tempColor, primitives, lights);
+        *color += brdf.kr * tempColor; // ??????????
+    }
+}
 
+Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor) {
+    float nDotL = dot(local.normal, lray->dir);
+    Vector temp = Vector();
+    Vector lightcolor = Vector(lcolor->r, lcolor->g, lcolor->b);
+    Vector diffuse = Vector(kd.r, kd.g, kd.b);
+    Vector specular = Vector(ks.r, ks.g, ks.b);
+    // Vector ambient = Vector(ka.r, ka.g, ka.b);
+
+    Vector lambert = diffuse * lightcolor * max(nDotL, 0.0);
+
+    Vector half = (ray.dir + lray->dir).normalize();
+    float nDotH = temp.dot(local.normal, half);
+
+    Vector phong = specular * lightcolor * pow (max(nDotH, 0.0), myshininess); // ?????????
+
+    Vector finalcolor = lambert + phong;
+    return Color(finalcolor.r, finalcolor.g, finalcolor.b);
+}
+
+Color RayTracer::shading(LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor) {
+
+}
+
+Ray RayTracer::createReflectRay(LocalGeo& local, Ray ray) {
+    // calculate normal vector
+    Normal normal = local.normal;
+    Vector n = Vector(normal.x, normal.y, normal.z);
+
+    // temp vector to use dot
+    Vector temp = Vector();
+    Vector n' = temp.dot(n, ray.dir) * n;
+
+    // direction of reflected ray
+    Vector dir = ray.dir + 2 * (n' - ray.dir);
+    dir.normalize();
+
+    Point pos = local.pos;
+    Ray reflectRay = Ray(pos, dir);
+
+    return reflectRay;
+}
 
     // Below is for light:
 
@@ -119,4 +135,3 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> prim
     //     trace(reflectRay, depth+1, &tempColor);
     //     *color += brdf.kr * tempColor;
     // }
-}

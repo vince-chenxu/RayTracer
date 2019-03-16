@@ -15,7 +15,8 @@ class RayTracer
 {
 public:
     RayTracer();
-    void trace(Ray& ray, int depth, Color* color, vector<Primitive*> primitives);
+    void trace(Ray& ray, int depth, Color* color, vector<Primitive*> primitives, vector<Light> lights);
+    Ray createReflectRay(LocalGeo local, Ray ray);
 
 private:
     // member variables

@@ -16,6 +16,8 @@
 #include "Material.h"
 #include "GeometricPrimitive.h"
 #include "Transformation.h"
+#include "PointLight.h"
+#include "DirectionalLight.h"
 // #include "BRDF.h"
 // #include "Color.h"
 // #include "Ray.h"
@@ -59,8 +61,9 @@ private:
     Vector* up;
     // fov
     float fov;
-    // Color objects: ka, kd, ks
-    Color ka, kd, ks;
+    // Color objects: ka, kd, ks, ke
+    Color ka, kd, ks, ke;
+    float ksh;
     // Color* kd;
     // Color* ks;
     // film object pointer
@@ -83,16 +86,10 @@ private:
     // vector that holds all primitives
     vector<Primitive*> primitives;
 
-    // Directional light's direction and color
-    Vector* dir_light_pos;
-    Color* dir_light_color;
-
-    // Point light's position and color
-    Point* point_light_pos;
-    Color* point_light_color;
-
     // Light attenuation factors
     float attenu_const;
     float attenu_linear;
     float attenu_quadra;
+
+    vector<Light> lights;
 };

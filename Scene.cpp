@@ -155,6 +155,26 @@ void Scene::loadFromFile(const char* filename)
                         ks.print();
                     }
                 }
+                else if (cmd == "shininess")
+                {
+                    validinput = readvals(s,1,values);
+                    if (validinput)
+                    {
+                        ksh = (float) values[0];
+                        cout << "shininess: ";
+                        cout << ksh;
+                    }
+                }
+                else if (cmd == "emission")
+                {
+                    validinput = readvals(s,3,values);
+                    if (validinput)
+                    {
+                        ke = Color(values[0],values[1],values[2]);
+                        cout << "emission: ";
+                        ke.print();
+                    }
+                }
 
                 // The followings are light related Commands
                 // Directional Light
@@ -162,6 +182,9 @@ void Scene::loadFromFile(const char* filename)
                     validinput = readvals(s,6,values);
                     if (validinput)
                     {
+                        DirectionalLight dl = DirectionalLight(values[0], values[1], values[2], values[3], values[4], values[5]);
+                        lights.push_back(dl);
+
                         dir_light_pos = new Vector(values[0],values[1],values[2]);
                         cout << "directional light direction: ";
                         dir_light_pos->print();
@@ -169,6 +192,7 @@ void Scene::loadFromFile(const char* filename)
                         dir_light_color = new Color(values[3],values[4],values[5]);
                         cout << "directional light color: ";
                         dir_light_color->print();
+
                     }
                 }
 
@@ -177,11 +201,14 @@ void Scene::loadFromFile(const char* filename)
                     validinput = readvals(s,6,values);
                     if (validinput)
                     {
-                        point_light_pos = new Point(values[0],values[1],values[2]);
+                        PointLight pl = PointLight(values[0], values[1], values[2], values[3], values[4], values[5]);
+                        lights.push_back(pl);
+
+                        Point point_light_pos = Point(values[0],values[1],values[2]);
                         cout << "point light direction: ";
                         point_light_pos->print();
 
-                        point_light_color = new Color(values[3],values[4],values[5]);
+                        Color point_light_color = Color(values[3],values[4],values[5]);
                         cout << "point light color: ";
                         point_light_color->print();
                     }
