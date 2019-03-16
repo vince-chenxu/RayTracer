@@ -67,7 +67,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color, vector<Primitive*> prim
     }
 
     // Handle mirror reflection
-    if (brdf.kr > 0) {
+    if (brdf.kr > 0) { //?????????????????/
         Ray reflectRay = createReflectRay(in.localGeo, ray);
         Color tempColor;
         // Make a recursive call to trace the reflected ray
@@ -128,27 +128,3 @@ Ray RayTracer::createReflectRay(LocalGeo& local, Ray& ray) {
 
     return reflectRay;
 }
-
-    // Below is for light:
-
-    // There is an intersection, loop through all light source
-    // for (i = 0; i < #lights; i++)
-    // {
-    //     lights[i].generateLightRay(in.local, &lray, &lcolor);
-    //
-    //     // Check if the light is blocked or not
-    //     if (!primitive->intersectP(lray))
-    //     // If not, do shading calculation for this
-    //     // light source
-    //     *color += shading(in.local, brdf, lray, lcolor);
-    // }
-    //
-    // // Handle mirror reflection
-    // if (brdf.kr > 0)
-    // {
-    //     reflectRay = createReflectRay(in.local, ray);
-    //
-    //     // Make a recursive call to trace the reflected ray
-    //     trace(reflectRay, depth+1, &tempColor);
-    //     *color += brdf.kr * tempColor;
-    // }

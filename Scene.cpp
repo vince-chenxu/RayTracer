@@ -368,33 +368,6 @@ void Scene::loadFromFile(const char* filename)
                         rightmultiply(m.mat, transfstack);
                     }
                 }
-
-                //   // Not applicable yet
-                //   else if (cmd == "emission") {
-                //   validinput = readvals(s, 4, values);
-                //   if (validinput) {
-                //     for (i = 0; i < 4; i++) {
-                //       emission[i] = values[i];
-                //     }
-                //   }
-                // }
-                //   // Not applicable yet
-                //   else if (cmd == "shininess") {
-                //   validinput = readvals(s, 1, values);
-                //   if (validinput) {
-                //     shininess = values[0];
-                //   }
-
-                // // I include the basic push/pop code for matrix stacks
-                // else if (cmd == "pushTransform") {
-                //   transfstack.push(transfstack.top());
-                // } else if (cmd == "popTransform") {
-                //   if (transfstack.size() <= 1) {
-                //     cerr << "Stack has no elements.  Cannot Pop\n";
-                //   } else {
-                //     transfstack.pop();
-                //   }
-                // }
                 else
                 {
                     cerr << "Unknown Command: " << cmd << " Skipping \n";
@@ -402,21 +375,6 @@ void Scene::loadFromFile(const char* filename)
             }
             getline (in, str);
         }
-
-        // Set up initial position for eye, up and amount
-        // As well as booleans
-
-        //   eye = eyeinit;
-        //   up = upinit;
-        //   amount = amountinit;
-        //   sx = sy = 1.0;  // keyboard controlled scales in x and y
-        //   tx = ty = 0.0;  // keyboard controllled translation in x and y
-        //   useGlu = false; // don't use the glu perspective/lookat fns
-        //
-        //   glEnable(GL_DEPTH_TEST);
-        // } else {
-        //   cerr << "Unable to Open Input Data File " << filename << "\n";
-        //   throw 2;
     }
 }
 
