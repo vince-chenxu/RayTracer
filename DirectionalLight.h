@@ -19,4 +19,5 @@ private:
     float attenu_const;
     float attenu_linear;
     float attenu_quadra;
+    bool isDir;
 };

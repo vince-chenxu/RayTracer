@@ -15,6 +15,7 @@ PointLight::PointLight(int x, int y, int z, float r, float g, float b) {
     attenu_const = 1;
     attenu_linear = 0;
     attenu_quadra = 0;
+    isDir = false;
 }
 
 PointLight::PointLight(int x, int y, int z, float r, float g, float b, float constant, float linear, float quadratic) {
@@ -27,7 +28,11 @@ PointLight::PointLight(int x, int y, int z, float r, float g, float b, float con
 
 void PointLight::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor) {
     lcolor = new Color(color.r, color.g, color.b);
-    Vector dir = pos - *local.pos;
+
+    // direction: intersection position TO LIGHT SOURCE
+    Vector dir = *local.pos - pos;
     dir.normalize();
+
+    // position: intersection position
     lray = new Ray(*local.pos, dir);
 }

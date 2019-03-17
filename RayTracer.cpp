@@ -53,11 +53,16 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
         Color* lcolor;
         lights[i].generateLightRay(in.localGeo, lray, lcolor);
 
-        // Check if the light is blocked or not
+        // // check if the light is blocked or not, if not, do lighting calculation for this light source
+        // // directional VS point light
+        // Ray eyetolight;
+        // if (lray->isDir) {
+        //     eyetolight = new Ray(lray->pos, lray->dir * (-1));
+        // } else {
+        //     eyetolight = new Ray(in.localGeo.pos, lray->dir * (-1));
+        // }
 
-        // If not, do lighting calculation for this
-        // light source
-        if (!primitive->intersect(ray, &thit, &in)) {
+        if (!primitive->intersect(*lray, &thit, &in)) {
             *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
         }
         else {
@@ -72,31 +77,32 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
     *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
 
-
-    // Finally add the ambient and emissive color to the object
-    *color = *color + brdf.ka + brdf.ke;
 }
 
 Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor, float c0, float c1, float c2) {
+    // temp and normal vectors
     Vector temp = Vector();
     Vector normal = Vector(local.normal->x, local.normal->y, local.normal->z);
 
+    // calculate N dot L and N dot H
     float nDotL = temp.dot(normal, lray->dir);
+    Vector half = (ray.dir + lray->dir);
+    half.normalize();
+    float nDotH = temp.dot(normal, half);
+
+    // change diffuse and specular to vectors
     Vector diffuse = Vector(brdf.kd.r, brdf.kd.g, brdf.kd.b);
     Vector specular = Vector(brdf.ks.r, brdf.ks.g, brdf.ks.b);
 
+    // calculate the light color after attenuation
     Vector distance = lray->pos - *local.pos;
     float r = sqrt(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z);
     Color after_attenu = *lcolor / (c0 + c1 * r + c2 * r * r);
     Vector lightcolor = Vector(after_attenu.r, after_attenu.g, after_attenu.b);
 
+    // calculate lambert and phong
     Vector diffuse_light = Vector(diffuse.x * lightcolor.x, diffuse.y * lightcolor.y, diffuse.z * lightcolor.z);
     Vector lambert = diffuse_light * max(nDotL, 0.0f);
-
-    Vector half = (ray.dir + lray->dir);
-    half.normalize();
-    float nDotH = temp.dot(normal, half);
-
     Vector spec_light = Vector(specular.x * lightcolor.x, specular.y * lightcolor.y, specular.z * lightcolor.z);
     Vector phong = spec_light * pow (max(nDotH, 0.0f), brdf.ksh);
 
