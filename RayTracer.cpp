@@ -37,47 +37,48 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     // color->r = brdf.ka.r;
     // color->g = brdf.ka.g;
     // color->b = brdf.ka.b;
+    *color = Color(brdf.ka.r, brdf.ka.g, brdf.ka.b);
     // color->print();
-    // *color = Color(brdf.ka.r, brdf.ka.g, brdf.ka.b);
+
 
     // hardcode threshold
-    if (depth == threshold) {
-        // Finally add the ambient and emissive color to the object
-        *color = *color + brdf.ka + brdf.ke;
-    }
-
-    // There is an intersection, loop through all light source
-    for (int i = 0; i < lights.size(); i++)
-    {
-        Ray* lray;
-        Color* lcolor;
-        lights[i].generateLightRay(in.localGeo, lray, lcolor);
-
-        // // check if the light is blocked or not, if not, do lighting calculation for this light source
-        // // directional VS point light
-        // Ray eyetolight;
-        // if (lray->isDir) {
-        //     eyetolight = new Ray(lray->pos, lray->dir * (-1));
-        // } else {
-        //     eyetolight = new Ray(in.localGeo.pos, lray->dir * (-1));
-        // }
-
-        if (!primitive->intersect(*lray, &thit, &in)) {
-            *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
-        }
-        else {
-            //*color = *color + shading(ray, in.localGeo, brdf, lray, lcolor);
-        }
-    }
+    // if (depth == threshold) {
+    //     // Finally add the ambient and emissive color to the object
+    //     *color = *color + brdf.ka + brdf.ke;
+    // }
+    //
+    // // There is an intersection, loop through all light source
+    // for (int i = 0; i < lights.size(); i++)
+    // {
+    //     Ray* lray;
+    //     Color* lcolor;
+    //     lights[i].generateLightRay(in.localGeo, lray, lcolor);
+    //
+    //     // // check if the light is blocked or not, if not, do lighting calculation for this light source
+    //     // // directional VS point light
+    //     // Ray eyetolight;
+    //     // if (lray->isDir) {
+    //     //     eyetolight = new Ray(lray->pos, lray->dir * (-1));
+    //     // } else {
+    //     //     eyetolight = new Ray(in.localGeo.pos, lray->dir * (-1));
+    //     // }
+    //
+    //     if (!primitive->intersect(*lray, &thit, &in)) {
+    //         *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
+    //     }
+    //     else {
+    //         //*color = *color + shading(ray, in.localGeo, brdf, lray, lcolor);
+    //     }
+    // }
 
     // Handle mirror reflection
-    Vector diff = ray.dir * (-0.0001); // + or - ?????????????????
-    LocalGeo temp = LocalGeo(Point(in.localGeo.pos->x + diff.x, in.localGeo.pos->y + diff.y, in.localGeo.pos->z + diff.z), *in.localGeo.normal);
-    Ray reflectRay = createReflectRay(temp, ray);
-    Color tempColor;
-    // Make a recursive call to trace the reflected ray
-    trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
-    *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
+    // Vector diff = ray.dir * (-0.0001); // + or - ?????????????????
+    // LocalGeo temp = LocalGeo(Point(in.localGeo.pos->x + diff.x, in.localGeo.pos->y + diff.y, in.localGeo.pos->z + diff.z), *in.localGeo.normal);
+    // Ray reflectRay = createReflectRay(temp, ray);
+    // Color tempColor;
+    // // Make a recursive call to trace the reflected ray
+    // trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
+    // *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
 
 }
 

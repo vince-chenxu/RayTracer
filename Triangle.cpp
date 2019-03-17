@@ -58,9 +58,9 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
 bool Triangle::intersectP(Ray& ray)
 {
     // add code here
-    float* thit;
-    LocalGeo* local = new LocalGeo();
-    return intersect(ray, thit, local);
+    float thit;
+    LocalGeo local;
+    return intersect(ray, &thit, &local);
 }
 void Triangle::print()
 {

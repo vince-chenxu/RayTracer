@@ -7,14 +7,13 @@ Transformation::Transformation()
 {
     // empty for now
     m = Matrix();
-    minvt = Matrix();
-    minvt.inverse();
-    minvt.transpose();
+    minvt = m.inverse().transpose();
 }
 
 Transformation::Transformation(Matrix matrix)
 {
     m = matrix;
+    // this may cause problem
     minvt = m.inverse().transpose();
 }
 Transformation::~Transformation()
@@ -37,12 +36,14 @@ Vector Transformation::operator*(const Vector &vector)
 }
 Normal Transformation::operator*(const Normal &normal)
 {
-    float x = minvt.mat[0][0] * normal.x + minvt.mat[1][0] * normal.y + minvt.mat[2][0] * normal.z + minvt.mat[3][0] * 1.0f;
-    float y = minvt.mat[0][1] * normal.x + minvt.mat[1][1] * normal.y + minvt.mat[2][1] * normal.z + minvt.mat[3][1] * 1.0f;
-    float z = minvt.mat[0][2] * normal.x + minvt.mat[1][2] * normal.y + minvt.mat[2][2] * normal.z + minvt.mat[3][2] * 1.0f;
-    Normal n = Normal(x, y, z);
-    n.normalize();
-    return n;
+    // float x = minvt.mat[0][0] * normal.x + minvt.mat[1][0] * normal.y + minvt.mat[2][0] * normal.z + minvt.mat[3][0] * 0.0f;
+    // float y = minvt.mat[0][1] * normal.x + minvt.mat[1][1] * normal.y + minvt.mat[2][1] * normal.z + minvt.mat[3][1] * 0.0f;
+    // float z = minvt.mat[0][2] * normal.x + minvt.mat[1][2] * normal.y + minvt.mat[2][2] * normal.z + minvt.mat[3][2] * 0.0f;
+    Vector v = Vector(normal.x, normal.y, normal.z);
+    Transformation t = Transformation(minvt);
+    v = t * v;
+    v.normalize();
+    return Normal(v.x, v.y, v.z);
 }
 LocalGeo Transformation::operator*(const LocalGeo &localGeo)
 {

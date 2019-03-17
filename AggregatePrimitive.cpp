@@ -22,7 +22,7 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in)
     // here we loop through all primitives
     //cout << "about to loop through all primitives\n";
     // arbitrary big number, used for infinity, will replace later
-    float min = 99999999;
+    float min = FLT_MAX;
     for (int i = 0; i < primitives.size(); i ++)
     {
         float hit;

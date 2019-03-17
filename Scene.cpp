@@ -27,10 +27,12 @@ Scene::Scene(const char* filename)
 //   for (int i = 0; i < 4; i++) values[i] = newval[i];
 // }
 
-void Scene::rightmultiply(const glm::mat4 & M, stack<Matrix> &transfstack)
+void Scene::rightmultiply(const glm::mat4 &M, stack<Matrix> &transfstack)
 {
   Matrix &T = transfstack.top();
   T.mat = T.mat * M;
+  cout << "after rightmultiply \n";
+  transfstack.top().print();
 }
 
 // help function much like the one from HW2
@@ -110,7 +112,7 @@ void Scene::loadFromFile(const char* filename)
                         lookAt->print();
 
                         up = new Vector(values[6], values[7], values[8]);
-                        up->normalize();
+                        // up->normalize();
 
                         cout << "printing Vector up\n";
 
@@ -291,9 +293,13 @@ void Scene::loadFromFile(const char* filename)
                             // transfstack not empty
                             (*t).transform = transfstack.top();
                         }
-                        Transformation* objW = new Transformation(transfstack.top());
-                        Transformation* wObj = new Transformation(transfstack.top().inverse());
-                        GeometricPrimitive* gp = new GeometricPrimitive(*objW, *wObj, s, m);
+                        Transformation objW = Transformation(transfstack.top());
+                        // cout << "transfstack.top: \n";
+                        // transfstack.top().print();
+                        Transformation wObj = Transformation(transfstack.top().inverse());
+                        // cout << "transfstack.top.inverse(): \n";
+                        // transfstack.top().inverse().print();
+                        GeometricPrimitive* gp = new GeometricPrimitive(objW, wObj, s, m);
                         primitives.push_back(gp);
                     }
                     //triNum ++;
@@ -313,9 +319,9 @@ void Scene::loadFromFile(const char* filename)
                             // transfstack not empty
                             (*sphere).transform = transfstack.top();
                         }
-                        Transformation* objW = new Transformation(transfstack.top());
-                        Transformation* wObj = new Transformation(transfstack.top().inverse());
-                        GeometricPrimitive* gp = new GeometricPrimitive(*objW, *wObj, s, m);
+                        Transformation objW = Transformation(transfstack.top());
+                        Transformation wObj = Transformation(transfstack.top().inverse());
+                        GeometricPrimitive* gp = new GeometricPrimitive(objW, wObj, s, m);
                         primitives.push_back(gp);
                     }
                     //triNum ++;
@@ -341,12 +347,12 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         Matrix m = Matrix();
-                        cout << "b4 scaling\n";
-                        m.print();
-                        cout << "Scaling:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
+                        // cout << "b4 scaling\n";
+                        // m.print();
+                        // cout << "Scaling:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
                         m.scale(values[0], values[1], values[2]);
-                        cout << "after scaling\n";
-                        m.print();
+                        // cout << "after scaling\n";
+                        // m.print();
                         rightmultiply(m.mat, transfstack);
                     }
                 }
@@ -356,12 +362,12 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         Matrix m = Matrix();
-                        cout << "b4 translating\n";
-                        m.print();
-                        cout << "Translating:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
+                        // cout << "b4 translating\n";
+                        // m.print();
+                        // cout << "Translating:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
                         m.translate(values[0], values[1], values[2]);
-                        cout << "after translating\n";
-                        m.print();
+                        // cout << "after translating\n";
+                        // m.print();
                         rightmultiply(m.mat, transfstack);
                     }
                 }
@@ -371,12 +377,12 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         Matrix m = Matrix();
-                        cout << "b4 rotating\n";
-                        m.print();
-                        cout << "Rotating:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
+                        // cout << "b4 rotating\n";
+                        // m.print();
+                        // cout << "Rotating:\n x: " << values[0] << " y: " << values[1] << " z: " << values[2] << endl;
                         m.rotate(values[0], values[1], values[2], values[3]);
-                        cout << "after rotating\n";
-                        m.print();
+                        // cout << "after rotating\n";
+                        // m.print();
                         rightmultiply(m.mat, transfstack);
                     }
                 }
@@ -394,28 +400,36 @@ void Scene::loadFromFile(const char* filename)
 void Scene::render()
 {
     // check vertices
-    cout << "Printing all vertices:\n";
-    for (int i = 0; i < vertex.size(); i ++)
-        vertex[i].print();
-    // check tri
-    cout << "Printing all tris\n";
-    for (int i = 0; i < tri.size(); i ++)
-        tri[i].print();
-    // check spheres
-    cout << "Printing all spheres\n";
-    for (int i = 0; i < sph.size(); i ++)
-        sph[i].print();
+    // cout << "Printing all vertices:\n";
+    // for (int i = 0; i < vertex.size(); i ++)
+    //     vertex[i].print();
+    // // check tri
+    // cout << "Printing all tris\n";
+    // for (int i = 0; i < tri.size(); i ++)
+    //     tri[i].print();
+    // // check spheres
+    // cout << "Printing all spheres\n";
+    // for (int i = 0; i < sph.size(); i ++)
+    //     sph[i].print();
 
     // check triangles
-    cout << "Print all triangles and spheres\n";
-    for (int i = 0; i < shape.size(); i ++)
-        shape[i]->print();
+    // cout << "Print all triangles and spheres\n";
+    // for (int i = 0; i < shape.size(); i ++)
+    //     shape[i]->print();
+    int count = 0;
     while (sampler->getSample(&sample))
     {
         camera->generateRay(sample, &ray);
+        // cout << "Ray:\n";
+        // ray.print();
         raytracer.trace(ray, 0, maxdepth, &color, primitives, lights, attenu_const, attenu_linear, attenu_quadra);
+        // color.print();
+        if (color.r != 0.0f && color.g != 0.0f && color.b != 0.0f)
+            count ++;
         film->commit(sample, color);
     }
+    cout << "Total intersected: " << count << endl;
+
     film->writeImage();
     cout << "There are total of " << primitives.size() << " objects\n";
 }

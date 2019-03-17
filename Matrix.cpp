@@ -12,6 +12,11 @@ Matrix::Matrix()
     // mat[0][0] = mat[1][1] = mat[2][2] = mat[3][3] = 1;
     mat = glm::mat4(1.0f);
 }
+
+Matrix::Matrix(glm::mat4 m1)
+{
+    mat = m1;
+}
 Matrix::Matrix(float x, float y, float z)
 {
     // empty for now
@@ -72,6 +77,33 @@ void Matrix::rotate(float x, float y, float z, float degree)
     // Since it's column major, we transpose the matrix
     mat = glm::transpose(mat);
     // return result;
+    // if (x == 1.0f)
+    // {
+    //     mat[0][0] = 1.0f;
+    //     mat[1][1] = cos(radians);
+    //     mat[1][2] = sin(radians);
+    //     mat[2][1] = -sin(radians);
+    //     mat[2][2] = cos(radians);
+    //     mat[3][3] = 1.0f;
+    // }
+    // else if (y == 1.0f)
+    // {
+    //     mat[0][0] = cos(radians);
+    //     mat[0][2] = -sin(radians);
+    //     mat[1][1] = 1.0f;
+    //     mat[2][2] = cos(radians);
+    //     mat[3][0] = sin(radians);
+    //     mat[3][3] = 1.0f;
+    // }
+    // else if (z == 1.0f)
+    // {
+    //     mat[0][0] = cos(radians);
+    //     mat[0][1] = sin(radians);
+    //     mat[1][0] = -sin(radians);
+    //     mat[1][1] = cos(radians);
+    //     mat[2][2] = 1.0f;
+    //     mat[3][3] = 1.0f;
+    // }
 }
 void Matrix::translate(float x, float y, float z)
 {
@@ -87,13 +119,13 @@ void Matrix::scale(float x, float y, float z)
 }
 Matrix Matrix::inverse()
 {
-    mat = glm::inverse(mat);
-    return *this;
+    glm::mat4 res = glm::inverse(mat);
+    return Matrix(res);
 }
 Matrix Matrix::transpose()
 {
-    mat = glm::transpose(mat);
-    return *this;
+    glm::mat4 res = glm::transpose(mat);
+    return Matrix(res);
 }
 void Matrix::print()
 {

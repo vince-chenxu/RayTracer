@@ -36,7 +36,7 @@ void Film::commit(Sample& sample, Color color)
     c.rgbRed = min((color.r * 255.0f), 255.0f);
     c.rgbGreen = min((color.g * 255.0f), 255.0f);
     c.rgbBlue = min((color.b * 255.0f), 255.0f);
-    FreeImage_SetPixelColor(img, (unsigned int)sample.x, (unsigned int)sample.y, &c);
+    FreeImage_SetPixelColor(img, (unsigned int)sample.x, height - (unsigned int)sample.y, &c);
 }
 
 void Film::writeImage()
