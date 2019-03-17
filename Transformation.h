@@ -25,7 +25,7 @@ public:
     Normal operator*(const Normal &normal);
     LocalGeo operator*(const LocalGeo &localGeo);
     Ray operator*(const Ray &ray);
-private:
+// private:
     // Matrix m and its inverse transpose minvt
     Matrix m, minvt;
     // Point* p;

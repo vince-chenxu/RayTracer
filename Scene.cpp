@@ -31,8 +31,8 @@ void Scene::rightmultiply(const glm::mat4 &M, stack<Matrix> &transfstack)
 {
   Matrix &T = transfstack.top();
   T.mat = T.mat * M;
-  cout << "after rightmultiply \n";
-  transfstack.top().print();
+  // cout << "after rightmultiply \n";
+  // transfstack.top().print();
 }
 
 // help function much like the one from HW2

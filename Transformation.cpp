@@ -29,9 +29,9 @@ Point Transformation::operator*(const Point &point)
 }
 Vector Transformation::operator*(const Vector &vector)
 {
-    float x = m.mat[0][0] * vector.x + m.mat[1][0] * vector.y + m.mat[2][0] * vector.z + m.mat[3][0] * 1.0f;
-    float y = m.mat[0][1] * vector.x + m.mat[1][1] * vector.y + m.mat[2][1] * vector.z + m.mat[3][1] * 1.0f;
-    float z = m.mat[0][2] * vector.x + m.mat[1][2] * vector.y + m.mat[2][2] * vector.z + m.mat[3][2] * 1.0f;
+    float x = m.mat[0][0] * vector.x + m.mat[1][0] * vector.y + m.mat[2][0] * vector.z + m.mat[3][0] * 0.0f;
+    float y = m.mat[0][1] * vector.x + m.mat[1][1] * vector.y + m.mat[2][1] * vector.z + m.mat[3][1] * 0.0f;
+    float z = m.mat[0][2] * vector.x + m.mat[1][2] * vector.y + m.mat[2][2] * vector.z + m.mat[3][2] * 0.0f;
     return Vector(x, y, z);
 }
 Normal Transformation::operator*(const Normal &normal)
