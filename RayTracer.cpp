@@ -71,7 +71,9 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     }
 
     // Handle mirror reflection
-    Ray reflectRay = createReflectRay(in.localGeo, ray);
+    Vector diff = ray.dir * (-0.0001); // + or - ?????????????????
+    LocalGeo temp = LocalGeo(Point(in.localGeo.pos->x + diff.x, in.localGeo.pos->y + diff.y, in.localGeo.pos->z + diff.z), *in.localGeo.normal);
+    Ray reflectRay = createReflectRay(temp, ray);
     Color tempColor;
     // Make a recursive call to trace the reflected ray
     trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
@@ -109,7 +111,7 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
     Vector finalcolor = lambert + phong;
     return Color(finalcolor.x, finalcolor.y, finalcolor.z);
 }
-//
+
 // Color RayTracer::shading(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor) {
 //     return;
 // }
