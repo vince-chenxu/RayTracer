@@ -38,6 +38,10 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in)
                 min = dist;
                 *thit = hit;
                 *in = n;
+
+                // std::cout << "AggregatePrimitive normal: " << '\n';
+                // Vector test_normal = Vector(in->localGeo.normal->x, in->localGeo.normal->y, in->localGeo.normal->z);
+                // test_normal.print();
             }
         }
     }

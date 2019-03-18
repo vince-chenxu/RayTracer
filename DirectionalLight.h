@@ -1,3 +1,6 @@
+#ifndef LIGHT_D
+#define LIGHT_D
+
 #include "Light.h"
 #include "Ray.h"
 #include "LocalGeo.h"
@@ -9,10 +12,12 @@ class DirectionalLight: public Light
 {
 public:
     DirectionalLight();
+    // ~DirectionalLight();
     DirectionalLight(int x, int y, int z, float r, float g, float b);
     DirectionalLight(int x, int y, int z, float r, float g, float b, float constant, float linear, float quadratic);
     Color getColor();
     bool getDir();
+    Point getPos();
     void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);
 
 // private:
@@ -23,3 +28,5 @@ public:
     float attenu_quadra;
     bool isDir;
 };
+
+#endif
