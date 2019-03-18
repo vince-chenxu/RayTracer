@@ -14,14 +14,14 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     // std::cout << primitives.size() << '\n';
     // std::cout << "light_size: " << '\n';
     // std::cout << lights.size() << '\n';
-    std::cout << "depth" << '\n';
-    std::cout << depth << '\n';
+    // std::cout << "depth" << '\n';
+    // std::cout << depth << '\n';
 
     if (depth > max_depth)
     {
         // depth exceeds the threshold
         // Make the color black and return
-        cout << "depth > threshold returning now\n";
+        //cout << "depth > threshold returning now\n";
         return;
     }
 
@@ -58,46 +58,51 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     // Finally add the ambient and emissive color to the object
     *color = *color + brdf.ka + brdf.ke;
 
-    std::cout << "AE color" << '\n';
-    color->print();
+    // std::cout << "AE color" << '\n';
+    // color->print();
 
     // There is an intersection, loop through all light source
-    cout << "light number" << '\n';
-    cout << lights.size() << '\n';
+    // cout << "light number" << '\n';
+    // cout << lights.size() << '\n';
     for (int i = 0; i < lights.size(); i++)
     {
         Ray* lray = new Ray();
         Color* lcolor = new Color();
         lights[i]->generateLightRay(in.localGeo, lray, lcolor);
 
-        std::cout << "lights property" << '\n';
-        lights[i]->getColor().print();
+        // std::cout << "t_max" << '\n';
+        // std::cout << lray->t_max << '\n';
 
-        std::cout << "lcolor" << '\n';
-        lcolor->print();
+        // std::cout << "lights property" << '\n';
+        // lights[i]->getColor().print();
+        //
+        // std::cout << "lcolor" << '\n';
+        // lcolor->print();
 
         Intersection temp_in;
         float temp_thit = 0.0f;
 
         // check if the light is blocked or not, if not, do lighting calculation for this light source
-        Vector diff = lray->dir * (0.0001);
+        Vector diff = lray->dir * (0.001);
         lray->pos.x = diff.x + lray->pos.x;
         lray->pos.y = diff.y + lray->pos.y;
         lray->pos.z = diff.z + lray->pos.z;
         //LocalGeo temp = LocalGeo(Point(in.localGeo.pos->x + diff.x, in.localGeo.pos->y + diff.y, in.localGeo.pos->z + diff.z), *in.localGeo.normal);
 
+        // std::cout << "t_max" << '\n';
+        // std::cout << lray->t_max << '\n';
         if (!primitive->intersectP(*lray)) {
 
             // directional VS point light
             if (!lights[i]->getDir()) {
                 Vector dis = lights[i]->getPos() - in.localGeo.pos;
                 float distance = sqrt(dis.x * dis.x + dis.y * dis.y + dis.z * dis.z);
-                std::cout << "distance" << '\n';
-                std::cout << distance << '\n';
+                // std::cout << "distance" << '\n';
+                // std::cout << distance << '\n';
 
                 *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2, distance);
-                cout << "color when lighting" << '\n';
-                color->print();
+                // cout << "color when lighting" << '\n';
+                // color->print();
                 //??????????? does every light have its own attenuation or share the same one
             } else {
                 *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, 1.0f, 0.0f, 0.0f, 0.0f);
@@ -110,7 +115,7 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     }
 
     Ray reflectRay = createReflectRay(in.localGeo, ray);
-    Vector diff2 = reflectRay.dir * (0.0001);
+    Vector diff2 = reflectRay.dir * (0.001);
     reflectRay.pos.x = diff2.x + reflectRay.pos.x;
     reflectRay.pos.y = diff2.y + reflectRay.pos.y;
     reflectRay.pos.z = diff2.z + reflectRay.pos.z;
@@ -118,8 +123,8 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     // Make a recursive call to trace the reflected ray
     trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
 
-    std::cout << "tempColor: " << '\n';
-    tempColor.print();
+    // std::cout << "tempColor: " << '\n';
+    // tempColor.print();
 
     *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
 
@@ -161,15 +166,15 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
     // std::cout << "nDotH: " << '\n';
     // std::cout << nDotH << '\n';
     //
-    std::cout << "nDotL: " << '\n';
-    std::cout << nDotL << '\n';
+    // std::cout << "nDotL: " << '\n';
+    // std::cout << nDotL << '\n';
 
     // change diffuse and specular to vectors
     Vector diffuse = Vector(brdf.kd.r, brdf.kd.g, brdf.kd.b);
     Vector specular = Vector(brdf.ks.r, brdf.ks.g, brdf.ks.b);
 
-    std::cout << "diffuse_vector: " << '\n';
-    diffuse.print();
+    // std::cout << "diffuse_vector: " << '\n';
+    // diffuse.print();
 
     // calculate the light color after attenuation
     // Vector distance = lray->pos - local.pos;
@@ -177,25 +182,25 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
     Color after_attenu = *lcolor / (c0 + c1 * r + c2 * r * r);
     Vector lightcolor = Vector(after_attenu.r, after_attenu.g, after_attenu.b);
 
-    std::cout << "lcolor_: " << '\n';
-    lcolor->print();
+    // std::cout << "lcolor_: " << '\n';
+    // lcolor->print();
+    //
+    // std::cout << "c0: " << '\n';
+    // std::cout << c0 << '\n';
+    // std::cout << "c1: " << '\n';
+    // std::cout << c1 << '\n';
+    // std::cout << "c2: " << '\n';
+    // std::cout << c2 << '\n';
 
-    std::cout << "c0: " << '\n';
-    std::cout << c0 << '\n';
-    std::cout << "c1: " << '\n';
-    std::cout << c1 << '\n';
-    std::cout << "c2: " << '\n';
-    std::cout << c2 << '\n';
-
-    std::cout << "lightcolor: " << '\n';
-    lightcolor.print();
+    // std::cout << "lightcolor: " << '\n';
+    // lightcolor.print();
 
     // calculate lambert and phong
     Vector diffuse_light = Vector(diffuse.x * lightcolor.x, diffuse.y * lightcolor.y, diffuse.z * lightcolor.z);
     Vector lambert = diffuse_light * max(nDotL, 0.0f);
-
-    std::cout << "lambert: " << '\n';
-    lambert.print();
+    //
+    // std::cout << "lambert: " << '\n';
+    // lambert.print();
     Vector spec_light = Vector(specular.x * lightcolor.x, specular.y * lightcolor.y, specular.z * lightcolor.z);
     Vector phong = spec_light * pow (max(nDotH, 0.0f), brdf.ksh);
 
@@ -213,13 +218,13 @@ Ray RayTracer::createReflectRay(LocalGeo& local, Ray& ray) {
     Normal normal = local.normal;
     Vector n = Vector(normal.x, normal.y, normal.z);
 
-    std::cout << "local normal" << '\n';
-    n.print();
+    // std::cout << "local normal" << '\n';
+    // n.print();
 
     Vector dir = ray.dir * (-1);
 
-    std::cout << "ray dir" << '\n';
-    dir.print();
+    // std::cout << "ray dir" << '\n';
+    // dir.print();
 
     // temp vector to use dot
     Vector temp = Vector();

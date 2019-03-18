@@ -64,5 +64,5 @@ LocalGeo Transformation::operator*(const LocalGeo &localGeo)
 }
 Ray Transformation::operator*(const Ray &ray)
 {
-    return Ray((*this) * ray.pos, (*this) * ray.dir);
+    return Ray((*this) * ray.pos, (*this) * ray.dir, ray.t_min, ray.t_max);
 }

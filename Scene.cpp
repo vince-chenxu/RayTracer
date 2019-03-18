@@ -108,24 +108,24 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         lookFrom = new Point(values[0], values[1], values[2]);
-                        cout << "printing Point lookFrom\n";
-                        lookFrom->print();
+                        // cout << "printing Point lookFrom\n";
+                        // lookFrom->print();
                         lookAt = new Point(values[3], values[4], values[5]);
-                        cout << "printing Point lookAt\n";
-                        lookAt->print();
+                        // cout << "printing Point lookAt\n";
+                        // lookAt->print();
 
                         up = new Vector(values[6], values[7], values[8]);
                         // up->normalize();
 
-                        cout << "printing Vector up\n";
+                        // cout << "printing Vector up\n";
 
                         fov = values[9];
-                        cout << "printing fov value\n";
-                        cout << fov << endl;
+                        // cout << "printing fov value\n";
+                        // cout << fov << endl;
                         // declare Sampler object for later sample calculations
                         sampler = new Sampler(width, height);
-                        cout << "printing Sampler width and height\n";
-                        sampler->print();
+                        // cout << "printing Sampler width and height\n";
+                        // sampler->print();
 
                         film = new Film(width, height);
 
@@ -146,8 +146,8 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         ka = Color(values[0],values[1],values[2]);
-                        cout << "ambient: ";
-                        ka.print();
+                        // cout << "ambient: ";
+                        // ka.print();
                     }
                 }
                 // diffuse command
@@ -157,8 +157,8 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         kd = Color(values[0],values[1],values[2]);
-                        cout << "diffuse: ";
-                        kd.print();
+                        // cout << "diffuse: ";
+                        // kd.print();
                     }
                 }
                 // specular command
@@ -178,8 +178,8 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         ksh = (float) values[0];
-                        cout << "shininess: ";
-                        cout << ksh << endl;
+                        // cout << "shininess: ";
+                        // cout << ksh << endl;
                     }
                 }
                 else if (cmd == "emission")
@@ -188,8 +188,8 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         ke = Color(values[0],values[1],values[2]);
-                        cout << "emission: ";
-                        ke.print();
+                        // cout << "emission: ";
+                        // ke.print();
                     }
                 }
 
@@ -201,16 +201,16 @@ void Scene::loadFromFile(const char* filename)
                     {
                         DirectionalLight* dl = new DirectionalLight(values[0], values[1], values[2], values[3], values[4], values[5]);
                         lights.push_back(dl);
-                        std::cout << "push back lights" << '\n';
-                        std::cout << lights.size() << '\n';
+                        // std::cout << "push back lights" << '\n';
+                        // std::cout << lights.size() << '\n';
 
                         Vector dir_light_pos = Vector(values[0],values[1],values[2]);
-                        cout << "directional light direction: ";
-                        dir_light_pos.print();
+                        // cout << "directional light direction: ";
+                        // dir_light_pos.print();
 
                         Color dir_light_color = Color(values[3],values[4],values[5]);
-                        cout << "directional light color: ";
-                        dir_light_color.print();
+                        // cout << "directional light color: ";
+                        // dir_light_color.print();
 
                     }
                 }
@@ -222,16 +222,16 @@ void Scene::loadFromFile(const char* filename)
                     {
                         PointLight* pl = new PointLight(values[0], values[1], values[2], values[3], values[4], values[5]);
                         lights.push_back(pl);
-                        std::cout << "push back lights" << '\n';
-                        std::cout << lights.size() << '\n';
+                        // std::cout << "push back lights" << '\n';
+                        // std::cout << lights.size() << '\n';
 
                         Point point_light_pos = Point(values[0],values[1],values[2]);
-                        cout << "point light direction: ";
-                        point_light_pos.print();
+                        // cout << "point light direction: ";
+                        // point_light_pos.print();
 
                         Color point_light_color = Color(values[3],values[4],values[5]);
-                        cout << "point light color: ";
-                        point_light_color.print();
+                        // cout << "point light color: ";
+                        // point_light_color.print();
                     }
                 }
 
@@ -241,16 +241,16 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
                         attenu_const = (float)values[0];
-                        cout << "attenuation-const: ";
-                        std::cout << attenu_const << '\n';
+                        // cout << "attenuation-const: ";
+                        // std::cout << attenu_const << '\n';
 
                         attenu_linear = (float)values[1];
-                        cout << "attenuation-linear: ";
-                        std::cout << attenu_linear << '\n';
+                        // cout << "attenuation-linear: ";
+                        // std::cout << attenu_linear << '\n';
 
                         attenu_quadra = (float)values[2];
-                        cout << "attenuation-quadratic: ";
-                        std::cout << attenu_quadra << '\n';
+                        // cout << "attenuation-quadratic: ";
+                        // std::cout << attenu_quadra << '\n';
                     }
                 }
 
@@ -259,7 +259,7 @@ void Scene::loadFromFile(const char* filename)
                     validinput = readvals(s,1,values);
                     if (validinput)
                         maxverts = (int)values[0];
-                    cout << "maxverts: " << maxverts << endl;
+                    // cout << "maxverts: " << maxverts << endl;
 
                 }
                 // vertex command
@@ -446,5 +446,5 @@ void Scene::render()
     // cout << "Total intersected: " << count << endl;
 
     film->writeImage(output);
-    cout << "There are total of " << primitives.size() << " objects\n";
+    // cout << "There are total of " << primitives.size() << " objects\n";
 }
