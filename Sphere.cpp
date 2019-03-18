@@ -60,6 +60,7 @@ bool Sphere::intersect(Ray& ray, float* thit, LocalGeo* local) {
 
     Vector n = p - c;
     n.normalize();
+
     local->normal = Normal(n.x, n.y, n.z);
     cout << "Sphere pos: \n";
     local->pos.print();

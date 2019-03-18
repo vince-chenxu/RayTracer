@@ -13,6 +13,9 @@ Scene::Scene(const char* filename)
     // set default values
     maxdepth = 5;
     ka = Color(0.2, 0.2, 0.2);
+    attenu_const = 1.0f;
+    attenu_linear = 0.0f;
+    attenu_quadra = 0.0f;
     // pass the filename and begin command parsing process
     loadFromFile(filename);
     render();
@@ -198,6 +201,8 @@ void Scene::loadFromFile(const char* filename)
                     {
                         DirectionalLight* dl = new DirectionalLight(values[0], values[1], values[2], values[3], values[4], values[5]);
                         lights.push_back(dl);
+                        std::cout << "push back lights" << '\n';
+                        std::cout << lights.size() << '\n';
 
                         Vector dir_light_pos = Vector(values[0],values[1],values[2]);
                         cout << "directional light direction: ";
@@ -217,6 +222,8 @@ void Scene::loadFromFile(const char* filename)
                     {
                         PointLight* pl = new PointLight(values[0], values[1], values[2], values[3], values[4], values[5]);
                         lights.push_back(pl);
+                        std::cout << "push back lights" << '\n';
+                        std::cout << lights.size() << '\n';
 
                         Point point_light_pos = Point(values[0],values[1],values[2]);
                         cout << "point light direction: ";

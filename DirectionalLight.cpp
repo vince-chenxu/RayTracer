@@ -12,9 +12,11 @@ DirectionalLight::DirectionalLight()
 DirectionalLight::DirectionalLight(int x, int y, int z, float r, float g, float b) {
     dir = Vector(x, y, z);
     color = Color(r, g, b);
-    attenu_const = 1;
-    attenu_linear = 0;
-    attenu_quadra = 0;
+    // std::cout << "lcolor in DirectionalLight.cpp" << '\n';
+    // color.print();
+    attenu_const = 1.0f;
+    attenu_linear = 0.0f;
+    attenu_quadra = 0.0f;
     isDir = true;
 }
 
@@ -34,14 +36,22 @@ bool DirectionalLight::getDir()
 {
     return true;
 }
+Point DirectionalLight::getPos() {
+    return Point(0.0f, 0.0f, 0.0f);
+}
 
 void DirectionalLight::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor) {
     *lcolor = Color(color.r, color.g, color.b);
-
     // direction: intersection position TO LIGHT SOURCE
     Vector ray_dir = Vector(-dir.x, -dir.y, -dir.z);
     ray_dir.normalize();
 
     // position: intersection position
-    *lray = Ray(local.pos, ray_dir, 0, INFINITY);
+
+    *lray = Ray(local.pos, ray_dir);
 }
+
+
+// DirectionalLight::~DirectionalLight() {
+//
+// }
