@@ -43,7 +43,7 @@ void PointLight::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor) {
     *lcolor = Color(color.r, color.g, color.b);
 
     // direction: intersection position TO LIGHT SOURCE
-    Vector dir = local.pos - pos;
+    Vector dir = pos - local.pos;
     dir.normalize();
 
     // position: intersection position
