@@ -10,6 +10,13 @@ RayTracer::RayTracer()
 
 void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<Primitive*> primitives, vector<Light*> lights, float c0, float c1, float c2)
 {
+    // std::cout << "prim_size: " << '\n';
+    // std::cout << primitives.size() << '\n';
+    // std::cout << "light_size: " << '\n';
+    // std::cout << lights.size() << '\n';
+    std::cout << "depth" << '\n';
+    std::cout << depth << '\n';
+
     if (depth > max_depth)
     {
         // depth exceeds the threshold
@@ -102,6 +109,21 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
         }
     }
 
+    Ray reflectRay = createReflectRay(in.localGeo, ray);
+    Vector diff2 = reflectRay.dir * (0.0001);
+    reflectRay.pos.x = diff2.x + reflectRay.pos.x;
+    reflectRay.pos.y = diff2.y + reflectRay.pos.y;
+    reflectRay.pos.z = diff2.z + reflectRay.pos.z;
+    Color tempColor = Color(0.0f, 0.0f, 0.0f);
+    // Make a recursive call to trace the reflected ray
+    trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
+
+    std::cout << "tempColor: " << '\n';
+    tempColor.print();
+
+    *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
+
+
     // // Handle mirror reflection
     // Vector diff = ray.dir * (-0.0001); // + or - ?????????????????
     // LocalGeo temp = LocalGeo(Point(in.localGeo.pos->x + diff.x, in.localGeo.pos->y + diff.y, in.localGeo.pos->z + diff.z), *in.localGeo.normal);
@@ -129,9 +151,9 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
 
     // calculate N dot L and N dot H
     float nDotL = abs(temp.dot(normal, lray->dir));
-    // Vector half = (ray.dir * (-1) + lray->dir);
-    // half.normalize();
-    // float nDotH = temp.dot(normal, half);
+    Vector half = (ray.dir * (-1) + lray->dir);
+    half.normalize();
+    float nDotH = abs(temp.dot(normal, half));
 
     // std::cout << "half: " << '\n';
     // half.print();
@@ -144,7 +166,7 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
 
     // change diffuse and specular to vectors
     Vector diffuse = Vector(brdf.kd.r, brdf.kd.g, brdf.kd.b);
-    //Vector specular = Vector(brdf.ks.r, brdf.ks.g, brdf.ks.b);
+    Vector specular = Vector(brdf.ks.r, brdf.ks.g, brdf.ks.b);
 
     std::cout << "diffuse_vector: " << '\n';
     diffuse.print();
@@ -174,12 +196,12 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
 
     std::cout << "lambert: " << '\n';
     lambert.print();
-    // Vector spec_light = Vector(specular.x * lightcolor.x, specular.y * lightcolor.y, specular.z * lightcolor.z);
-    // Vector phong = spec_light * pow (max(nDotH, 0.0f), brdf.ksh);
-    //
-    // Vector finalcolor = lambert + phong;
-    // return Color(finalcolor.x, finalcolor.y, finalcolor.z);
-    return Color(lambert.x, lambert.y, lambert.z);
+    Vector spec_light = Vector(specular.x * lightcolor.x, specular.y * lightcolor.y, specular.z * lightcolor.z);
+    Vector phong = spec_light * pow (max(nDotH, 0.0f), brdf.ksh);
+
+    Vector finalcolor = lambert + phong;
+    return Color(finalcolor.x, finalcolor.y, finalcolor.z);
+    //return Color(lambert.x, lambert.y, lambert.z);
 }
 
 // Color RayTracer::shading(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor) {
@@ -191,16 +213,43 @@ Ray RayTracer::createReflectRay(LocalGeo& local, Ray& ray) {
     Normal normal = local.normal;
     Vector n = Vector(normal.x, normal.y, normal.z);
 
+    std::cout << "local normal" << '\n';
+    n.print();
+
+    Vector dir = ray.dir * (-1);
+
+    std::cout << "ray dir" << '\n';
+    dir.print();
+
     // temp vector to use dot
     Vector temp = Vector();
-    Vector n_ = n * temp.dot(n, ray.dir);
+    Vector n_ = n * temp.dot(n, dir);
 
     // direction of reflected ray
-    Vector dir = ray.dir + (n_ - ray.dir) * 2;
-    dir.normalize();
+    Vector dir_ = dir + (n_ - dir) * 2;
+    dir_.normalize();
 
     Point pos = local.pos;
-    Ray reflectRay = Ray(pos, dir);
+    Ray reflectRay = Ray(pos, dir_);
 
     return reflectRay;
 }
+
+// Ray RayTracer::createReflectRay(LocalGeo& local, Ray& ray) {
+//     // calculate normal vector
+//     Normal normal = local.normal;
+//     Vector n = Vector(normal.x, normal.y, normal.z);
+//
+//     // temp vector to use dot
+//     Vector temp = Vector();
+//     Vector n_ = n * temp.dot(n, ray.dir);
+//
+//     // direction of reflected ray
+//     Vector dir = ray.dir + (n_ - ray.dir) * 2;
+//     dir.normalize();
+//
+//     Point pos = local.pos;
+//     Ray reflectRay = Ray(pos, dir);
+//
+//     return reflectRay;
+// }

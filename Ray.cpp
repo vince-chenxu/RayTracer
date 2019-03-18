@@ -7,6 +7,8 @@ using namespace std;
 Ray::Ray()
 {
     // empty for now
+    t_min = 0;
+    t_max = FLT_MAX;
 }
 
 Ray::Ray(Point position, Vector direction)
@@ -14,8 +16,8 @@ Ray::Ray(Point position, Vector direction)
     pos = position;
     dir = direction;
     dir.normalize();
-    t_min = 1;
-    t_max = 100;
+    t_min = 0;
+    t_max = FLT_MAX;
 }
 // constructor with Point position, Vector direction, min and max
 Ray::Ray(Point position, Vector direction, float min, float max)
