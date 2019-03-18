@@ -20,6 +20,9 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)
 {
     Ray oray = worldToObj*ray;
     LocalGeo olocal;
+    // std::cout << "t_max" << '\n';
+    // std::cout << oray.t_max << '\n';
+    oray.t_max = ray.t_max;
     if (!shape->intersect(oray, thit, &olocal))
         return false;
     // cout << "olocal in GeometricPrimitive\n";

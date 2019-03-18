@@ -89,6 +89,8 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
         lray->pos.z = diff.z + lray->pos.z;
         //LocalGeo temp = LocalGeo(Point(in.localGeo.pos->x + diff.x, in.localGeo.pos->y + diff.y, in.localGeo.pos->z + diff.z), *in.localGeo.normal);
 
+        // std::cout << "t_max" << '\n';
+        // std::cout << lray->t_max << '\n';
         if (!primitive->intersectP(*lray)) {
 
             // directional VS point light

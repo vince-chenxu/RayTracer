@@ -16,8 +16,10 @@ AggregatePrimitive::AggregatePrimitive(vector<Primitive*> list)
 {
     primitives = list;
 }
-bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in)
-{
+bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in) {
+
+// std::cout << "t_max" << '\n';
+// std::cout << ray.t_max << '\n';
     bool intersected = false;
     // here we loop through all primitives
     //cout << "about to loop through all primitives\n";
@@ -51,6 +53,8 @@ bool AggregatePrimitive::intersectP(Ray& ray)
 {
     float thit;
     Intersection in;
+    // std::cout << "t_max" << '\n';
+    // std::cout << ray.t_max << '\n';
     return intersect(ray, &thit, &in);
 }
 

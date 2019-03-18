@@ -20,6 +20,8 @@ Triangle::Triangle(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y
 // return intersection point and normal
 bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
 {
+    // std::cout << "t_max" << '\n';
+    // std::cout << ray.t_max << '\n';
     // add code here
     Point pos = ray.getPos();
     Vector dir = ray.getDir();
@@ -43,10 +45,10 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     if (b < 0.0f || b > 1.0f || g < 0.0f || g > 1.0f || (b + g) > 1.0f || temp < ray.getMin() || temp > ray.t_max) {
         // std::cout << "t_max" << '\n';
         // std::cout << ray.t_max << '\n';
-        if (ray.t_max < 10) {
-            std::cout << "t_max" << '\n';
-            std::cout << ray.t_max << '\n';
-        }
+        // if (ray.t_max < 10) {
+        //     std::cout << "t_max" << '\n';
+        //     std::cout << ray.t_max << '\n';
+        // }
         return false;
     }
 
