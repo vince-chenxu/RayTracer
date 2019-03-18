@@ -48,7 +48,7 @@ void DirectionalLight::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolo
 
     // position: intersection position
 
-    *lray = Ray(local.pos, ray_dir, 0, INFINITY);
+    *lray = Ray(local.pos, ray_dir);
 }
 
 

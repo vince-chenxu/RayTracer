@@ -62,10 +62,10 @@ bool Sphere::intersect(Ray& ray, float* thit, LocalGeo* local) {
     n.normalize();
 
     local->normal = Normal(n.x, n.y, n.z);
-    cout << "Sphere pos: \n";
-    local->pos.print();
-    cout << "Sphere normal:\n";
-    local->normal.print();
+    // cout << "Sphere pos: \n";
+    // local->pos.print();
+    // cout << "Sphere normal:\n";
+    // local->normal.print();
     return true;
 }
 
@@ -79,9 +79,9 @@ bool Sphere::intersectP(Ray& ray) {
 
 void Sphere::print()
 {
-    cout << "center coordinates: ";
-    center->print();
-    cout << "radius: " << radius << endl;
+    // cout << "center coordinates: ";
+    // center->print();
+    // cout << "radius: " << radius << endl;
 }
 
 Color Sphere::getColor()
