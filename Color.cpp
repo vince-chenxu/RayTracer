@@ -6,6 +6,9 @@ using namespace std;
 Color::Color()
 {
     // empty for npw
+    r = 0.0f;
+    g = 0.0f;
+    b = 0.0f;
 }
 
 // constructor with float r, g, b

@@ -428,6 +428,7 @@ void Scene::render()
         camera->generateRay(sample, &ray);
         // cout << "Ray:\n";
         // ray.print();
+        color = Color(0.0f, 0.0f, 0.0f);
         raytracer.trace(ray, 0, maxdepth, &color, primitives, lights, attenu_const, attenu_linear, attenu_quadra);
         // color.print();
         // if (color.r != 0.0f && color.g != 0.0f && color.b != 0.0f)
