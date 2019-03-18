@@ -26,13 +26,22 @@ PointLight::PointLight(int x, int y, int z, float r, float g, float b, float con
     attenu_quadra = quadratic;
 }
 
+Color PointLight::getColor()
+{
+    return color;
+}
+bool PointLight::getDir()
+{
+    return false;
+}
+
 void PointLight::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor) {
-    lcolor = new Color(color.r, color.g, color.b);
+    *lcolor = Color(color.r, color.g, color.b);
 
     // direction: intersection position TO LIGHT SOURCE
-    Vector dir = *local.pos - pos;
+    Vector dir = local.pos - pos;
     dir.normalize();
 
     // position: intersection position
-    lray = new Ray(*local.pos, dir);
+    *lray = Ray(local.pos, dir);
 }

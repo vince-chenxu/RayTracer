@@ -31,7 +31,7 @@ bool AggregatePrimitive::intersect(Ray& ray, float* thit, Intersection* in)
         {
             // There is an intersection
             intersected = true;
-            float dist = getDist(*(n.localGeo.pos), ray.pos);
+            float dist = getDist(n.localGeo.pos, ray.pos);
             if (dist < min && hit > 0)
             {
                 // update variables

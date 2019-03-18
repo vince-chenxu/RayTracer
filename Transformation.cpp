@@ -47,7 +47,11 @@ Normal Transformation::operator*(const Normal &normal)
 }
 LocalGeo Transformation::operator*(const LocalGeo &localGeo)
 {
-    return LocalGeo((*this) * (*localGeo.pos), (*this) * (*localGeo.normal));
+    // return LocalGeo((*this) * (*localGeo.pos), (*this) * (*localGeo.normal));
+    LocalGeo local(localGeo.pos, localGeo.normal);
+    local.pos = (*this) * localGeo.pos;
+    local.normal = (*this) * localGeo.normal;
+    return local;
 }
 Ray Transformation::operator*(const Ray &ray)
 {

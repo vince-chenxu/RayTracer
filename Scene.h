@@ -91,6 +91,6 @@ private:
     float attenu_linear;
     float attenu_quadra;
 
-    vector<Light> lights;
+    vector<Light*> lights;
     string output;
 };

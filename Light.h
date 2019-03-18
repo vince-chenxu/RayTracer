@@ -17,7 +17,9 @@ class Light
     // and the ray points to the light direction, however, t_max is infinity.
 
 public:
-    void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);
+    virtual Color getColor() = 0;
+    virtual bool getDir() = 0;
+    virtual void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);
 };
 
 #endif

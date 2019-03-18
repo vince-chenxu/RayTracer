@@ -47,8 +47,12 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     *thit = temp;
     Vector n = v31.cross(v31, v21);
     n.normalize();
-    local->pos = new Point(pos.x + temp * dir.x, pos.y + temp * dir.y, pos.z + temp * dir.z);
-    local->normal = new Normal(n.x, n.y, n.z);
+    local->pos = Point(ray.pos.x + temp * ray.dir.x, ray.pos.y + temp * ray.dir.y, ray.pos.z + temp * ray.dir.z);
+    local->normal = Normal(n.x, n.y, n.z);
+    // cout << "Triangle pos: \n";
+    // local->pos.print();
+    // cout << "Triangle normal:\n";
+    // local->normal.print();
     return true;
 
 }

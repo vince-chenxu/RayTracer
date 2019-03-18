@@ -8,7 +8,7 @@ RayTracer::RayTracer()
 
 }
 
-void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<Primitive*> primitives, vector<Light> lights, float c0, float c1, float c2)
+void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<Primitive*> primitives, vector<Light*> lights, float c0, float c1, float c2)
 {
     if (depth > max_depth)
     {
@@ -38,7 +38,46 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     // color->g = brdf.ka.g;
     // color->b = brdf.ka.b;
     *color = Color(brdf.ka.r, brdf.ka.g, brdf.ka.b);
+    // cout << "There's an intersection, printing in.localGeo\n";
+    // in.localGeo.print();
     // color->print();
+
+
+    // There is an intersection, loop through all light source
+    // cout << "light number" << '\n';
+    // cout << lights.size() << '\n';
+    // for (int i = 0; i < lights.size(); i++)
+    // {
+    //     Ray* lray = new Ray();
+    //     Color* lcolor = new Color();
+    //     lights[i]->generateLightRay(in.localGeo, lray, lcolor);
+    //
+    //     std::cout << "lights property" << '\n';
+    //     lights[i]->getColor().print();
+    //
+    //     std::cout << "lcolor" << '\n';
+    //     lcolor->print();
+    //
+    //     Intersection temp_in;
+    //     float temp_thit = 0.0f;
+    //     // check if the light is blocked or not, if not, do lighting calculation for this light source
+    //     if (!primitive->intersect(*lray, &temp_thit, &temp_in)) {
+    //
+    //         // directional VS point light
+    //         if (!lights[i]->getDir()) {
+    //             *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
+    //             cout << "color when lighting" << '\n';
+    //             color->print();
+    //             //??????????? does every light have its own attenuation or share the same one
+    //         } else {
+    //             *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, 1.0f, 0.0f, 0.0f);
+    //         }
+    //     }
+    //     else {
+    //         //*color = *color + shading(ray, in.localGeo, brdf, lray, lcolor);
+    //     }
+    // }
+
 
 
     // hardcode threshold
@@ -47,29 +86,29 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     //     *color = *color + brdf.ka + brdf.ke;
     // }
     //
-    // There is an intersection, loop through all light source
-    for (int i = 0; i < lights.size(); i++)
-    {
-        Ray* lray;
-        Color* lcolor;
-        lights[i].generateLightRay(in.localGeo, lray, lcolor);
-
-        // // check if the light is blocked or not, if not, do lighting calculation for this light source
-        // // directional VS point light
-        // Ray eyetolight;
-        // if (lray->isDir) {
-        //     eyetolight = new Ray(lray->pos, lray->dir * (-1));
-        // } else {
-        //     eyetolight = new Ray(in.localGeo.pos, lray->dir * (-1));
-        // }
-
-        if (!primitive->intersect(*lray, &thit, &in)) {
-            *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
-        }
-        else {
-            //*color = *color + shading(ray, in.localGeo, brdf, lray, lcolor);
-        }
-    }
+    // // There is an intersection, loop through all light source
+    // for (int i = 0; i < lights.size(); i++)
+    // {
+    //     Ray* lray;
+    //     Color* lcolor;
+    //     lights[i]->generateLightRay(in.localGeo, lray, lcolor);
+    //
+    //     // // check if the light is blocked or not, if not, do lighting calculation for this light source
+    //     // // directional VS point light
+    //     // Ray eyetolight;
+    //     // if (lray->isDir) {
+    //     //     eyetolight = new Ray(lray->pos, lray->dir * (-1));
+    //     // } else {
+    //     //     eyetolight = new Ray(in.localGeo.pos, lray->dir * (-1));
+    //     // }
+    //
+    //     if (!primitive->intersect(*lray, &thit, &in)) {
+    //         *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
+    //     }
+    //     else {
+    //         //*color = *color + shading(ray, in.localGeo, brdf, lray, lcolor);
+    //     }
+    // }
 
     // Handle mirror reflection
     // Vector diff = ray.dir * (-0.0001); // + or - ?????????????????
@@ -85,7 +124,7 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
 Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor, float c0, float c1, float c2) {
     // temp and normal vectors
     Vector temp = Vector();
-    Vector normal = Vector(local.normal->x, local.normal->y, local.normal->z);
+    Vector normal = Vector(local.normal.x, local.normal.y, local.normal.z);
 
     // calculate N dot L and N dot H
     float nDotL = temp.dot(normal, lray->dir);
@@ -98,7 +137,7 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
     Vector specular = Vector(brdf.ks.r, brdf.ks.g, brdf.ks.b);
 
     // calculate the light color after attenuation
-    Vector distance = lray->pos - *local.pos;
+    Vector distance = lray->pos - local.pos;
     float r = sqrt(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z);
     Color after_attenu = *lcolor / (c0 + c1 * r + c2 * r * r);
     Vector lightcolor = Vector(after_attenu.r, after_attenu.g, after_attenu.b);
@@ -119,8 +158,8 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
 
 Ray RayTracer::createReflectRay(LocalGeo& local, Ray& ray) {
     // calculate normal vector
-    Normal* normal = local.normal;
-    Vector n = Vector(normal->x, normal->y, normal->z);
+    Normal normal = local.normal;
+    Vector n = Vector(normal.x, normal.y, normal.z);
 
     // temp vector to use dot
     Vector temp = Vector();
@@ -130,8 +169,8 @@ Ray RayTracer::createReflectRay(LocalGeo& local, Ray& ray) {
     Vector dir = ray.dir + (n_ - ray.dir) * 2;
     dir.normalize();
 
-    Point* pos = local.pos;
-    Ray reflectRay = Ray(*pos, dir);
+    Point pos = local.pos;
+    Ray reflectRay = Ray(pos, dir);
 
     return reflectRay;
 }

@@ -23,6 +23,7 @@ public:
     Normal operator-(Normal other);
     // normalize function
     void normalize();
+    void print();
 //private:
     float x, y, z;
 };

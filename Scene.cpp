@@ -196,7 +196,7 @@ void Scene::loadFromFile(const char* filename)
                     validinput = readvals(s,6,values);
                     if (validinput)
                     {
-                        DirectionalLight dl = DirectionalLight(values[0], values[1], values[2], values[3], values[4], values[5]);
+                        DirectionalLight* dl = new DirectionalLight(values[0], values[1], values[2], values[3], values[4], values[5]);
                         lights.push_back(dl);
 
                         Vector dir_light_pos = Vector(values[0],values[1],values[2]);
@@ -215,7 +215,7 @@ void Scene::loadFromFile(const char* filename)
                     validinput = readvals(s,6,values);
                     if (validinput)
                     {
-                        PointLight pl = PointLight(values[0], values[1], values[2], values[3], values[4], values[5]);
+                        PointLight* pl = new PointLight(values[0], values[1], values[2], values[3], values[4], values[5]);
                         lights.push_back(pl);
 
                         Point point_light_pos = Point(values[0],values[1],values[2]);

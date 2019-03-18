@@ -11,9 +11,11 @@ public:
     DirectionalLight();
     DirectionalLight(int x, int y, int z, float r, float g, float b);
     DirectionalLight(int x, int y, int z, float r, float g, float b, float constant, float linear, float quadratic);
+    Color getColor();
+    bool getDir();
     void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);
 
-private:
+// private:
     Vector dir;
     Color color;
     float attenu_const;

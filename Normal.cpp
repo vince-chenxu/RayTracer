@@ -42,3 +42,8 @@ void Normal::normalize()
         z = z / divisor;
     }
 }
+
+void Normal::print()
+{
+    cout << "nx: " << x << " ny: " << y << " nz: " << z << endl;
+}

@@ -56,12 +56,15 @@ bool Sphere::intersect(Ray& ray, float* thit, LocalGeo* local) {
     }
 
     Vector p = e_vec + d * (*thit);
-    local->pos = new Point(p.x, p.y, p.z);
+    local->pos = Point(p.x, p.y, p.z);
 
     Vector n = p - c;
     n.normalize();
-    local->normal = new Normal(n.x, n.y, n.z);
-
+    local->normal = Normal(n.x, n.y, n.z);
+    cout << "Sphere pos: \n";
+    local->pos.print();
+    cout << "Sphere normal:\n";
+    local->normal.print();
     return true;
 }
 

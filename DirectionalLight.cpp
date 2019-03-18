@@ -26,13 +26,22 @@ DirectionalLight::DirectionalLight(int x, int y, int z, float r, float g, float 
     attenu_quadra = quadratic;
 }
 
+Color DirectionalLight::getColor()
+{
+    return color;
+}
+bool DirectionalLight::getDir()
+{
+    return true;
+}
+
 void DirectionalLight::generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor) {
-    lcolor = new Color(color.r, color.g, color.b);
+    *lcolor = Color(color.r, color.g, color.b);
 
     // direction: intersection position TO LIGHT SOURCE
     Vector ray_dir = Vector(-dir.x, -dir.y, -dir.z);
     ray_dir.normalize();
 
     // position: intersection position
-    lray = new Ray(*local.pos, ray_dir, 0, INFINITY);
+    *lray = Ray(local.pos, ray_dir, 0, INFINITY);
 }

@@ -17,10 +17,11 @@ public:
     LocalGeo();
     // constructor
     LocalGeo(Point p, Normal n);
+    void print();
     ~LocalGeo();
 
-    Point* pos;
-    Normal* normal;
+    Point pos;
+    Normal normal;
 private:
 
 };

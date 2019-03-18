@@ -11,9 +11,11 @@ public:
     PointLight();
     PointLight(int x, int y, int z, float r, float g, float b);
     PointLight(int x, int y, int z, float r, float g, float b, float constant, float linear, float quadratic);
+    Color getColor();
+    bool getDir();
     void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);
 
-private:
+// private:
     Point pos;
     Color color;
     float attenu_const;

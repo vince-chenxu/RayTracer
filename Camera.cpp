@@ -25,6 +25,8 @@ Camera::Camera(Point from, Point at, Vector u, float fov, int w, int h)
 void Camera::generateRay(Sample& sample, Ray* ray)
 {
 
+    sample.x += 0.5f;
+    sample.y += 0.5f;
     // a = eye
     Vector a = lookFrom - lookAt;
     // normalize a to get w

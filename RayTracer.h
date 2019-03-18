@@ -17,7 +17,7 @@ class RayTracer
 {
 public:
     RayTracer();
-    void trace(Ray& ray, int depth, int max_depth, Color* color, vector<Primitive*> primitives, vector<Light> lights, float c0, float c1, float c2);
+    void trace(Ray& ray, int depth, int max_depth, Color* color, vector<Primitive*> primitives, vector<Light*> lights, float c0, float c1, float c2);
     Ray createReflectRay(LocalGeo& local, Ray& ray);
     Color lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor, float c0, float c1, float c2);
     Color shading(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color* lcolor);
