@@ -22,7 +22,7 @@ public:
     // Will write the color to (sample.x, sample.y) on the image
     void commit(Sample& sample, Color color);
     // Output image to a file
-    void writeImage();
+    void writeImage(string fileName);
 private:
     // member variables
     int width, height, pix;

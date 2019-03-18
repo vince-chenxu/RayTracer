@@ -176,7 +176,7 @@ void Scene::loadFromFile(const char* filename)
                     {
                         ksh = (float) values[0];
                         cout << "shininess: ";
-                        cout << ksh;
+                        cout << ksh << endl;
                     }
                 }
                 else if (cmd == "emission")
@@ -386,6 +386,12 @@ void Scene::loadFromFile(const char* filename)
                         rightmultiply(m.mat, transfstack);
                     }
                 }
+                else if (cmd == "output")
+                {
+                    s >> cmd;
+                    output = cmd;
+                    cout << "output file: " << output << endl;
+                }
                 else
                 {
                     cerr << "Unknown Command: " << cmd << " Skipping \n";
@@ -416,7 +422,7 @@ void Scene::render()
     // cout << "Print all triangles and spheres\n";
     // for (int i = 0; i < shape.size(); i ++)
     //     shape[i]->print();
-    int count = 0;
+    // int count = 0;
     while (sampler->getSample(&sample))
     {
         camera->generateRay(sample, &ray);
@@ -424,12 +430,12 @@ void Scene::render()
         // ray.print();
         raytracer.trace(ray, 0, maxdepth, &color, primitives, lights, attenu_const, attenu_linear, attenu_quadra);
         // color.print();
-        if (color.r != 0.0f && color.g != 0.0f && color.b != 0.0f)
-            count ++;
+        // if (color.r != 0.0f && color.g != 0.0f && color.b != 0.0f)
+        //     count ++;
         film->commit(sample, color);
     }
-    cout << "Total intersected: " << count << endl;
+    // cout << "Total intersected: " << count << endl;
 
-    film->writeImage();
+    film->writeImage(output);
     cout << "There are total of " << primitives.size() << " objects\n";
 }

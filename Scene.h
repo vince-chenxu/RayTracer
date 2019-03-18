@@ -92,4 +92,5 @@ private:
     float attenu_quadra;
 
     vector<Light> lights;
+    string output;
 };

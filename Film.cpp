@@ -39,7 +39,7 @@ void Film::commit(Sample& sample, Color color)
     FreeImage_SetPixelColor(img, (unsigned int)sample.x, height - (unsigned int)sample.y, &c);
 }
 
-void Film::writeImage()
+void Film::writeImage(string fileName)
 {
     //img = FreeImage_ConvertFromRawBits(pixels, width, height, width * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
     // add code here

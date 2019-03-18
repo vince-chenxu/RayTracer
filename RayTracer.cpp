@@ -47,29 +47,29 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     //     *color = *color + brdf.ka + brdf.ke;
     // }
     //
-    // // There is an intersection, loop through all light source
-    // for (int i = 0; i < lights.size(); i++)
-    // {
-    //     Ray* lray;
-    //     Color* lcolor;
-    //     lights[i].generateLightRay(in.localGeo, lray, lcolor);
-    //
-    //     // // check if the light is blocked or not, if not, do lighting calculation for this light source
-    //     // // directional VS point light
-    //     // Ray eyetolight;
-    //     // if (lray->isDir) {
-    //     //     eyetolight = new Ray(lray->pos, lray->dir * (-1));
-    //     // } else {
-    //     //     eyetolight = new Ray(in.localGeo.pos, lray->dir * (-1));
-    //     // }
-    //
-    //     if (!primitive->intersect(*lray, &thit, &in)) {
-    //         *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
-    //     }
-    //     else {
-    //         //*color = *color + shading(ray, in.localGeo, brdf, lray, lcolor);
-    //     }
-    // }
+    // There is an intersection, loop through all light source
+    for (int i = 0; i < lights.size(); i++)
+    {
+        Ray* lray;
+        Color* lcolor;
+        lights[i].generateLightRay(in.localGeo, lray, lcolor);
+
+        // // check if the light is blocked or not, if not, do lighting calculation for this light source
+        // // directional VS point light
+        // Ray eyetolight;
+        // if (lray->isDir) {
+        //     eyetolight = new Ray(lray->pos, lray->dir * (-1));
+        // } else {
+        //     eyetolight = new Ray(in.localGeo.pos, lray->dir * (-1));
+        // }
+
+        if (!primitive->intersect(*lray, &thit, &in)) {
+            *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2);
+        }
+        else {
+            //*color = *color + shading(ray, in.localGeo, brdf, lray, lcolor);
+        }
+    }
 
     // Handle mirror reflection
     // Vector diff = ray.dir * (-0.0001); // + or - ?????????????????
