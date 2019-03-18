@@ -79,7 +79,7 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
         lray->pos.z = diff.z + lray->pos.z;
         //LocalGeo temp = LocalGeo(Point(in.localGeo.pos->x + diff.x, in.localGeo.pos->y + diff.y, in.localGeo.pos->z + diff.z), *in.localGeo.normal);
 
-        if (!primitive->intersect(*lray, &temp_thit, &temp_in)) {
+        if (!primitive->intersectP(*lray)) {
 
             // directional VS point light
             if (!lights[i]->getDir()) {

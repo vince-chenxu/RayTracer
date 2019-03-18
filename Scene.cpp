@@ -432,6 +432,7 @@ void Scene::render()
     // int count = 0;
     while (sampler->getSample(&sample))
     {
+        // sample.print();
         camera->generateRay(sample, &ray);
         // cout << "Ray:\n";
         // ray.print();
