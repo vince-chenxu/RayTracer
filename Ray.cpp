@@ -16,6 +16,8 @@ Ray::Ray(Point position, Vector direction)
     dir.normalize();
     t_min = 0.0f;
     t_max = FLT_MAX;
+    // std::cout << "max" << '\n';
+    // std::cout << t_max << '\n';
 }
 // constructor with Point position, Vector direction, min and max
 Ray::Ray(Point position, Vector direction, float min, float max)
@@ -24,8 +26,10 @@ Ray::Ray(Point position, Vector direction, float min, float max)
     dir = direction;
     // normalize direction
     dir.normalize();
-    t_min = 0.0f;
-    t_max = FLT_MAX;
+    t_min = min;
+    t_max = max;
+    // std::cout << "max" << '\n';
+    // std::cout << t_max << '\n';
 }
 
 Point Ray::getPos() {
@@ -37,6 +41,8 @@ Vector Ray::getDir() {
 }
 
 float Ray::getMax() {
+    std::cout << "max" << '\n';
+    std::cout << t_max << '\n';
     return t_max;
 }
 float Ray::getMin() {

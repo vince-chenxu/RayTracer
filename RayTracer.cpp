@@ -70,6 +70,9 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
         Color* lcolor = new Color();
         lights[i]->generateLightRay(in.localGeo, lray, lcolor);
 
+        // std::cout << "t_max" << '\n';
+        // std::cout << lray->t_max << '\n';
+
         // std::cout << "lights property" << '\n';
         // lights[i]->getColor().print();
         //
@@ -80,7 +83,7 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
         float temp_thit = 0.0f;
 
         // check if the light is blocked or not, if not, do lighting calculation for this light source
-        Vector diff = lray->dir * (0.0001);
+        Vector diff = lray->dir * (0.001);
         lray->pos.x = diff.x + lray->pos.x;
         lray->pos.y = diff.y + lray->pos.y;
         lray->pos.z = diff.z + lray->pos.z;
@@ -110,7 +113,7 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     }
 
     Ray reflectRay = createReflectRay(in.localGeo, ray);
-    Vector diff2 = reflectRay.dir * (0.0001);
+    Vector diff2 = reflectRay.dir * (0.001);
     reflectRay.pos.x = diff2.x + reflectRay.pos.x;
     reflectRay.pos.y = diff2.y + reflectRay.pos.y;
     reflectRay.pos.z = diff2.z + reflectRay.pos.z;
@@ -186,7 +189,7 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
     // std::cout << c1 << '\n';
     // std::cout << "c2: " << '\n';
     // std::cout << c2 << '\n';
-    //
+
     // std::cout << "lightcolor: " << '\n';
     // lightcolor.print();
 

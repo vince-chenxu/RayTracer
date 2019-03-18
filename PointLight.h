@@ -13,8 +13,8 @@ class PointLight: public Light
 public:
     PointLight();
     // ~PointLight();
-    PointLight(int x, int y, int z, float r, float g, float b);
-    PointLight(int x, int y, int z, float r, float g, float b, float constant, float linear, float quadratic);
+    PointLight(float x, float y, float z, float r, float g, float b);
+    PointLight(float x, float y, float z, float r, float g, float b, float constant, float linear, float quadratic);
     Color getColor();
     bool getDir();
     void generateLightRay(LocalGeo& local, Ray* lray, Color* lcolor);

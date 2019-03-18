@@ -40,8 +40,15 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     float g = n2.dot(n2, dir);
     g = g / d;
 
-    if (b < 0.0f || b > 1.0f || g < 0.0f || g > 1.0f || (b + g) > 1.0f || temp < ray.getMin() || temp > ray.getMax())
+    if (b < 0.0f || b > 1.0f || g < 0.0f || g > 1.0f || (b + g) > 1.0f || temp < ray.getMin() || temp > ray.t_max) {
+        // std::cout << "t_max" << '\n';
+        // std::cout << ray.t_max << '\n';
+        if (ray.t_max < 10) {
+            std::cout << "t_max" << '\n';
+            std::cout << ray.t_max << '\n';
+        }
         return false;
+    }
 
     // update thit
     *thit = temp;
