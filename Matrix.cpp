@@ -13,6 +13,10 @@ Matrix::Matrix()
     mat = glm::mat4(1.0f);
 }
 
+Matrix::~Matrix()
+{
+
+}
 Matrix::Matrix(glm::mat4 m1)
 {
     mat = m1;

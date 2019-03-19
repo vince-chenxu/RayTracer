@@ -12,7 +12,7 @@ class DirectionalLight: public Light
 {
 public:
     DirectionalLight();
-    // ~DirectionalLight();
+    // ~DirectionalLight(){};
     DirectionalLight(float x, float y, float z, float r, float g, float b);
     DirectionalLight(float x, float y, float z, float r, float g, float b, float constant, float linear, float quadratic);
     Color getColor();

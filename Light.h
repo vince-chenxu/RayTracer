@@ -20,7 +20,7 @@ public:
     // bool isDir;
     // Color color;
     // Light();
-    // virtual ~Light();
+    // virtual ~Light(){};
     virtual Color getColor() = 0;
     virtual bool getDir() = 0;
     virtual Point getPos() = 0;

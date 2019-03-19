@@ -15,6 +15,7 @@ public:
 
     // default constructor
     Matrix();
+    ~Matrix();
     Matrix(glm::mat4 m1);
     Matrix(float x, float y, float z);
     void rotate(float x, float y, float z, float degree);

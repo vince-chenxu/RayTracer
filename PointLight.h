@@ -12,7 +12,7 @@ class PointLight: public Light
 {
 public:
     PointLight();
-    // ~PointLight();
+    // ~PointLight(){};
     PointLight(float x, float y, float z, float r, float g, float b);
     PointLight(float x, float y, float z, float r, float g, float b, float constant, float linear, float quadratic);
     Color getColor();
