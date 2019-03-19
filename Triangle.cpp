@@ -16,6 +16,11 @@ Triangle::Triangle(float x1, float y1, float z1, float x2, float y2, float z2, f
     v3 = new Point(x3, y3, z3);
     color = new Color(c.r, c.g, c.b);;
 }
+
+Triangle::~Triangle()
+{
+    
+}
 // Test if ray intersects with the shape or not (in object space), if so,
 // return intersection point and normal
 bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
