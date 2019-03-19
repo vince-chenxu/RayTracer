@@ -119,19 +119,19 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
     }
     *color = *color + ret;
 
-    // Ray reflectRay = createReflectRay(in.localGeo, ray);
-    // Vector diff2 = reflectRay.dir * (0.001);
-    // reflectRay.pos.x = diff2.x + reflectRay.pos.x;
-    // reflectRay.pos.y = diff2.y + reflectRay.pos.y;
-    // reflectRay.pos.z = diff2.z + reflectRay.pos.z;
-    // Color tempColor = Color(0.0f, 0.0f, 0.0f);
-    // // Make a recursive call to trace the reflected ray
-    // trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
-    //
-    // // std::cout << "tempColor: " << '\n';
-    // // tempColor.print();
-    //
-    // *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
+    Ray reflectRay = createReflectRay(in.localGeo, ray);
+    Vector diff2 = reflectRay.dir * (0.001);
+    reflectRay.pos.x = diff2.x + reflectRay.pos.x;
+    reflectRay.pos.y = diff2.y + reflectRay.pos.y;
+    reflectRay.pos.z = diff2.z + reflectRay.pos.z;
+    Color tempColor = Color(0.0f, 0.0f, 0.0f);
+    // Make a recursive call to trace the reflected ray
+    trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
+
+    // std::cout << "tempColor: " << '\n';
+    // tempColor.print();
+
+    *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
 
 
     // // Handle mirror reflection
@@ -163,7 +163,7 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
     float nDotL = abs(temp.dot(normal, lray->dir));
     Vector half = (ray.dir * (-1) + lray->dir);
     half.normalize();
-    float nDotH = temp.dot(normal, half);
+    float nDotH = abs(temp.dot(normal, half));
 
     // std::cout << "half: " << '\n';
     // half.print();

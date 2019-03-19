@@ -87,8 +87,8 @@ void Scene::loadFromFile(const char* filename)
                     if (validinput)
                     {
 
-                        //width = (int) values[0]; height = (int) values[1];
-                        width = values[0]; height = values[1];
+                        width = (int)values[0]; height = (int)values[1];
+                        // width = values[0]; height = values[1];
                     }
                 }
 
