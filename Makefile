@@ -18,7 +18,7 @@ all: RayTracer
 RayTracer: main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Triangle.o Sphere.o Normal.o LocalGeo.o Shape.o Intersection.o BRDF.o RayTracer.o Matrix.o Transformation.o Primitive.o GeometricPrimitive.o Material.o AggregatePrimitive.o Light.o PointLight.o DirectionalLight.o Scene.h Point.h Vector.h Sample.h Sampler.h Color.h Ray.h Film.h Camera.h Vertex.h Tri.h Sph.h Triangle.h Sphere.h Normal.h LocalGeo.h Shape.h Intersection.h BRDF.h RayTracer.h Matrix.h Transformation.h Primitive.h GeometricPrimitive.h Material.h AggregatePrimitive.h Light.h PointLight.h DirectionalLight.h
 	$(CC) $(CFLAGS) -o RayTracer main.o Scene.o Point.o Vector.o Sample.o Sampler.o Color.o Ray.o Film.o Camera.o Vertex.o Tri.o Sph.o Triangle.o Sphere.o Normal.o LocalGeo.o Shape.o Intersection.o BRDF.o RayTracer.o Matrix.o Transformation.o Primitive.o GeometricPrimitive.o Material.o AggregatePrimitive.o Light.o PointLight.o DirectionalLight.o $(INCFLAGS) $(LDFLAGS)
 main.o: main.cpp Scene.h
-	$(CC) $(CFLAGS) $(INCFLAGS) -c main.cpp
+	$(CC) $(CFLAGS) $(INCFLAGS) -c main.cpp 
 Scene.o: Scene.cpp Scene.h
 	$(CC) $(CFLAGS) $(INCFLAGS) -c Scene.cpp
 Point.o: Point.cpp Point.h

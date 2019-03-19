@@ -9,7 +9,7 @@ class Triangle : public Shape
 {
 public:
     Triangle();
-    Triangle(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, Color c);
+    Triangle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, Color c);
     // The intersection with the ray at t outside the range [t_min, t_max]
     // should return false.
 

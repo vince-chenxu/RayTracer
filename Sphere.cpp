@@ -42,18 +42,48 @@ bool Sphere::intersect(Ray& ray, float* thit, LocalGeo* local) {
     float t0 = (-1 * b_ - d_) / (2 * a_);
     float t1 = (-1 * b_ + d_) / (2 * a_);
 
-    if (t1 > 0 && t0 > 0) {
-        *thit = t0;
+    // if (t0 > ray.t_max || t1 > ray.t_max)
+    //     return false;
+    //
+    // if (t1 < ray.t_min)
+    //     return false;
+    //
+    // if (t0 > ray.t_min)
+    //     *thit = t0;
+    // else
+    //     *thit = t1;
+    //
+    // if( *thit < ray.t_min || *thit > ray.t_max )
+    //     return false;
+
+    if (t0 > t1) {
+      float temp = t0;
+      t0 = t1;
+      t1 = temp;
     }
-    if (t1 < 0 && t0 < 0) {
-        return false;
+
+    if (t1 < 0) {
+      return false;
     }
-    if (t0 == t1) {
-        *thit = t0;
+
+    if (t0 < 0) {
+      *thit = t1;
+    } else {
+      *thit = t0;
     }
-    if (t0 < 0 && t1 > 0) {
-        *thit = t1;
-    }
+
+    // if (t1 > 0 && t0 > 0) {
+    //     *thit = t0;
+    // }
+    // if (t1 < 0 && t0 < 0) {
+    //     return false;
+    // }
+    // if (t0 == t1) {
+    //     *thit = t0;
+    // }
+    // if (t0 < 0 && t1 > 0) {
+    //     *thit = t1;
+    // }
 
     Vector p = e_vec + d * (*thit);
     local->pos = Point(p.x, p.y, p.z);
@@ -66,7 +96,7 @@ bool Sphere::intersect(Ray& ray, float* thit, LocalGeo* local) {
     // local->pos.print();
     // cout << "Sphere normal:\n";
     // local->normal.print();
-    return true;
+    return *thit > ray.t_min && *thit < ray.t_max;
 }
 
 // Same as intersect, but just return whether there is any intersection or

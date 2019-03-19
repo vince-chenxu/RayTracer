@@ -9,11 +9,11 @@ Triangle::Triangle()
     // empty for now
 }
 // constructor
-Triangle::Triangle(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3, Color c)
+Triangle::Triangle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, Color c)
 {
-    v1 = new Point((float) x1, (float) y1, (float) z1);
-    v2 = new Point((float) x2, (float) y2, (float) z2);
-    v3 = new Point((float) x3, (float) y3, (float) z3);
+    v1 = new Point(x1, y1, z1);
+    v2 = new Point(x2, y2, z2);
+    v3 = new Point(x3, y3, z3);
     color = new Color(c.r, c.g, c.b);;
 }
 // Test if ray intersects with the shape or not (in object space), if so,
@@ -21,6 +21,8 @@ Triangle::Triangle(int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y
 bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
 {
     // add code here
+    // cout << "triangle ray t_min: " << ray.t_min << endl;
+    // cout << "triangle ray t_max: " << ray.t_max << endl;
     Point pos = ray.getPos();
     Vector dir = ray.getDir();
 
@@ -40,7 +42,15 @@ bool Triangle::intersect(Ray& ray, float* thit, LocalGeo* local)
     float g = n2.dot(n2, dir);
     g = g / d;
 
-    if (b < 0.0f || b > 1.0f || g < 0.0f || g > 1.0f || (b + g) > 1.0f || temp < ray.getMin() || temp > ray.getMax())
+    // if (b < 0.0f || b > 1.0f || g < 0.0f || g > 1.0f || (b + g) > 1.0f || temp < ray.getMin() || temp > ray.getMax())
+    //     return false;
+    if (b < 0.0f || b > 1.0f)
+        return false;
+    if (g < 0.0f || g > 1.0f)
+        return false;
+    if ((b + g) > 1.0f)
+        return false;
+    if (temp < ray.getMin() || temp > ray.getMax())
         return false;
 
     // update thit

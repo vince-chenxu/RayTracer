@@ -19,7 +19,7 @@ GeometricPrimitive::~GeometricPrimitive()
 bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)
 {
     Ray oray = worldToObj*ray;
-     oray.t_max = ray.t_max;
+    // oray.t_max = ray.t_max;
     LocalGeo olocal;
     if (!shape->intersect(oray, thit, &olocal))
         return false;
@@ -34,7 +34,7 @@ bool GeometricPrimitive::intersect(Ray& ray, float* thit, Intersection* in)
 bool GeometricPrimitive::intersectP(Ray& ray)
 {
     Ray oray = worldToObj*ray;
-    oray.t_max = ray.t_max;
+    // oray.t_max = ray.t_max;
     return shape->intersectP(oray);
 }
 void GeometricPrimitive::getBRDF(LocalGeo& local, BRDF* brdf)

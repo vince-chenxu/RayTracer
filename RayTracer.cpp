@@ -60,7 +60,7 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
 
     // std::cout << "AE color" << '\n';
     // color->print();
-
+    Color ret = Color(0.0f, 0.0f, 0.0f);
     // There is an intersection, loop through all light source
     // cout << "light number" << '\n';
     // cout << lights.size() << '\n';
@@ -69,10 +69,9 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
         Ray* lray = new Ray();
         Color* lcolor = new Color();
         lights[i]->generateLightRay(in.localGeo, lray, lcolor);
-
         // std::cout << "t_max" << '\n';
         // std::cout << lray->t_max << '\n';
-
+        //
         // std::cout << "lights property" << '\n';
         // lights[i]->getColor().print();
         //
@@ -94,39 +93,45 @@ void RayTracer::trace(Ray& ray, int depth, int max_depth, Color* color, vector<P
         if (!primitive->intersectP(*lray)) {
 
             // directional VS point light
+            Vector dis = lights[i]->getPos() - in.localGeo.pos;
+            float distance = sqrt(dis.x * dis.x + dis.y * dis.y + dis.z * dis.z);
             if (!lights[i]->getDir()) {
-                Vector dis = lights[i]->getPos() - in.localGeo.pos;
-                float distance = sqrt(dis.x * dis.x + dis.y * dis.y + dis.z * dis.z);
+                // Vector dis = lights[i]->getPos() - in.localGeo.pos;
+                // float distance = sqrt(dis.x * dis.x + dis.y * dis.y + dis.z * dis.z);
                 // std::cout << "distance" << '\n';
                 // std::cout << distance << '\n';
 
-                *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2, distance);
+                ret = ret + lighting(ray, in.localGeo, brdf, lray, lcolor, c0, c1, c2, distance);
                 // cout << "color when lighting" << '\n';
                 // color->print();
                 //??????????? does every light have its own attenuation or share the same one
+                // cout << "Point light brah\n";
             } else {
-                *color = *color + lighting(ray, in.localGeo, brdf, lray, lcolor, 1.0f, 0.0f, 0.0f, 0.0f);
+                // cout << "DirectionalLight brah\n";
+
+                ret = ret + lighting(ray, in.localGeo, brdf, lray, lcolor, 1.0f, 0.0f, 0.0f, distance);
             }
         }
         else {
             //*color = *color + shading(ray, in.localGeo, brdf, lray, lcolor);
-            // *color = Color(0.0f, 0.0f, 0.0f);
+            // *color = Color(1.0f, 1.0f, 1.0f);
         }
     }
+    *color = *color + ret;
 
-    Ray reflectRay = createReflectRay(in.localGeo, ray);
-    Vector diff2 = reflectRay.dir * (0.001);
-    reflectRay.pos.x = diff2.x + reflectRay.pos.x;
-    reflectRay.pos.y = diff2.y + reflectRay.pos.y;
-    reflectRay.pos.z = diff2.z + reflectRay.pos.z;
-    Color tempColor = Color(0.0f, 0.0f, 0.0f);
-    // Make a recursive call to trace the reflected ray
-    trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
-
-    // std::cout << "tempColor: " << '\n';
-    // tempColor.print();
-
-    *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
+    // Ray reflectRay = createReflectRay(in.localGeo, ray);
+    // Vector diff2 = reflectRay.dir * (0.001);
+    // reflectRay.pos.x = diff2.x + reflectRay.pos.x;
+    // reflectRay.pos.y = diff2.y + reflectRay.pos.y;
+    // reflectRay.pos.z = diff2.z + reflectRay.pos.z;
+    // Color tempColor = Color(0.0f, 0.0f, 0.0f);
+    // // Make a recursive call to trace the reflected ray
+    // trace(reflectRay, depth+1, max_depth, &tempColor, primitives, lights, c0, c1, c2);
+    //
+    // // std::cout << "tempColor: " << '\n';
+    // // tempColor.print();
+    //
+    // *color = *color + Color(tempColor.r * brdf.ks.r, tempColor.g * brdf.ks.g, tempColor.b * brdf.ks.b);
 
 
     // // Handle mirror reflection
@@ -158,7 +163,7 @@ Color RayTracer::lighting(Ray& ray, LocalGeo& local, BRDF brdf, Ray* lray, Color
     float nDotL = abs(temp.dot(normal, lray->dir));
     Vector half = (ray.dir * (-1) + lray->dir);
     half.normalize();
-    float nDotH = abs(temp.dot(normal, half));
+    float nDotH = temp.dot(normal, half);
 
     // std::cout << "half: " << '\n';
     // half.print();

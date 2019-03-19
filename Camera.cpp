@@ -45,7 +45,7 @@ void Camera::generateRay(Sample& sample, Ray* ray)
 
     temp.normalize();
 
-    *ray = Ray(lookFrom, temp, 0.0f, FLT_MAX);
+    *ray = Ray(lookFrom, temp);
 
     // float alpha = tan(angle) * ((float)my_wdith/my_height) * (sample.x - my_wdith/2.0) / (my_wdith/2.0);
     // /*
