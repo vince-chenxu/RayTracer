@@ -1,3 +1,3 @@
 - System: Mac OS
 
-- File ediot: ATOM
+- File editor: ATOM
